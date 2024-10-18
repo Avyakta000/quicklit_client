@@ -1,7 +1,7 @@
 "use client"; // Mark as a Client Component
 
 import { useState } from 'react';
-import { FcGoogle } from 'react-icons/fc'; // Import Google icon from react-icons
+import { FcGoogle } from 'react-icons/fc';
 
 const SignupPage = () => {
   const [firstName, setFirstName] = useState('');
