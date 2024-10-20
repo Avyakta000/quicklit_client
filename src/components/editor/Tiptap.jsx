@@ -39,37 +39,114 @@ const Tiptap = ({setContent}) => {
       },
   });
 
-  const uploadImage = async (file) => {
+  // const handleImageRequestOnActions = async (file,action) => {
+  //   try {
+  //     // Generate a pre-signed URL
+  //     // Upload the file to S3 using the pre-signed URL
+  //     if ( action ==="upload"){
+  //       const data = {
+  //         fileName: file.name,
+  //         fileType: file.type,
+  //       };
+  //       const response = await axios.post(
+  //         `http://localhost:8000/api/generate_presigned_url/`,
+  //         data
+  //       );
+  //       const { url } = response.data;
+
+  //       await axios.put(url, file, {
+  //         headers: {
+  //           "Content-Type": file.type,
+  //         },
+  //       });
+  //       // setImageList((prevList) => [...prevList, imageUrl]); // Add image URL to the list
+
+  //     } else if (action ==="delete"){
+      
+  //       const response = await axios.post(
+  //         `http://localhost:8000/api/generate_delete_presigned_url/`,
+  //         {fileUrl:file}
+  //       );
+  //       const { url } = response.data;
+
+  //       await axios.delete(url); 
+  //       setImageList((prevList) => prevList.filter((url) => url !== file.name));
+  //     }
+  //     const imageUrl = url.split("?")[0]; // URL without query params
+
+  //     if (imageUrl) {
+  //       console.log(imageUrl, 'imageurl')
+  //       editor.chain().focus().setImage({ src: imageUrl }).run();
+  //       setImageList((prevList) => [...prevList, imageUrl]); // Add image URL to the list
+  //     }
+  //   } catch (error) {
+  //     console.error("Error uploading image:", error);
+  //     alert("Failed to upload image. Please try again."); // Alert user on error
+  //   }
+  // };
+  const handleImageUpload = async (file) => {
     try {
       // Generate a pre-signed URL
-      const data = {
-        fileName: file.name,
-        fileType: file.type,
-      };
-      const response = await axios.post(
-        `http://localhost:8000/api/generate_presigned_url/`,
-        data
-      );
-      const { url } = response.data;
-
       // Upload the file to S3 using the pre-signed URL
-      await axios.put(url, file, {
-        headers: {
-          "Content-Type": file.type,
-        },
-      });
-      //   console.log(responses3,'response s3')
+    
+        const data = {
+          fileName: file.name,
+          fileType: file.type,
+        };
+        const response = await axios.post(
+          `http://localhost:8000/api/generate_presigned_url/`,
+          data
+        );
+        const { url } = response.data;
 
-      // Add the image to the editor and track it
+        await axios.put(url, file, {
+          headers: {
+            "Content-Type": file.type,
+          },
+        });
+      
       const imageUrl = url.split("?")[0]; // URL without query params
 
       if (imageUrl) {
         console.log(imageUrl, 'imageurl')
         editor.chain().focus().setImage({ src: imageUrl }).run();
+        setImageList((prevList) => [...prevList, imageUrl]); // Add image URL to the list
       }
-      //   editor.chain().focus().setImage({ src: imageUrl }).run();
-      setImageList((prevList) => [...prevList, imageUrl]); // Add image URL to the list
     } catch (error) {
+      console.error("Error uploading image:", error);
+      alert("Failed to upload image. Please try again."); // Alert user on error
+    }
+  };
+
+  // handle delete image
+  const handleImageDelete = async (urlImage) => {
+    try {
+      // Generate a pre-signed URL
+      // Upload the file to S3 using the pre-signed URL
+    
+        const data = {
+          imageUrl: urlImage
+        };
+        const response = await axios.post(
+          `http://localhost:8000/api/generate_delete_presigned_url/`,
+          data
+        );
+
+        if (response.status===200){
+          alert("image deleted"); // Alert user on error
+        }
+ 
+        // const { url } = response.data;
+
+        // await axios.delete(url, {
+        //   headers: {
+        //     "Content-Type": file.type,
+        //   },
+        // });
+        
+      // const imageUrl = url.split("?")[0]; // URL without query params
+
+      } catch (error) {
       console.error("Error uploading image:", error);
       alert("Failed to upload image. Please try again."); // Alert user on error
     }
@@ -82,18 +159,16 @@ const Tiptap = ({setContent}) => {
     fileInput.onchange = async (event) => {
       const file = event.target.files[0];
       if (file) {
-        await uploadImage(file);
+        await handleImageUpload(file);
       }
     };
     fileInput.click();
   }, [editor]);
 
   const deleteImage = useCallback(
-    (imageUrl) => {
-      editor.commands.deleteContentAt({
-        from: editor.state.selection.from,
-        to: editor.state.selection.to,
-      });
+   async (imageUrl) => {
+      await handleImageDelete(imageUrl);
+      editor.chain().focus().deleteSelection().run();
       setImageList((prevList) => prevList.filter((url) => url !== imageUrl)); // Remove image from list
     },
     [editor]
