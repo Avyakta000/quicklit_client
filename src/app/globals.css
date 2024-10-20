@@ -47,3 +47,14 @@ body {
   }
 }
 
+.prose pre {
+  margin: 0;
+  padding: 5;
+  border-radius: 0;
+}
+
+/* .prose code {
+  margin: 0;
+  padding: 0;
+} */
+

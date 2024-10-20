@@ -1,8 +1,8 @@
 // app/reads/[slug]/page.js
-"use client"
-import { selectReadBySlug } from '@/redux/features/readSlice';
-import React from 'react';
-import { useSelector } from 'react-redux';
+"use client";
+import { selectReadBySlug } from "@/redux/features/readSlice";
+import React from "react";
+import { useSelector } from "react-redux";
 
 const ReadDetailPage = ({ params }) => {
   const { slug } = params;
@@ -31,10 +31,12 @@ const ReadDetailPage = ({ params }) => {
             className="w-full h-72 object-cover rounded-lg mb-4"
           />
         )}
-         <div
-        className="prose"
-        dangerouslySetInnerHTML={{ __html: read.content }}
-      />
+
+        <div className="prose mx-auto">
+          <div dangerouslySetInnerHTML={{ __html: read.content }} />
+        <pre className="m-0 p-0"></pre>
+        <code className="m-0 p-0"></code>
+        </div>
         {/* <p className="text-gray-600">{read.content}</p> */}
       </div>
     </div>

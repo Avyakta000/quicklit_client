@@ -59,7 +59,7 @@ const ReadCard = ({ read }) => {
 
   return (
     <div className="bg-white rounded-lg shadow-md p-4">
-      {read.images.length > 0 && (
+      {read?.images.length > 0 && (
         <img
           src={read.images[0].image}
           alt={read.title}
