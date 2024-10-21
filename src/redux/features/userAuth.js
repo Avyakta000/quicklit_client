@@ -1,5 +1,5 @@
 "use client";
-
+import axiosInstance from '@/utils/axiosInstance';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
@@ -7,27 +7,30 @@ axios.defaults.withCredentials = true; // Ensure cookies are sent with requests
 
 // Async Thunks
 export const loginUser = createAsyncThunk('auth/login', async (credentials) => {
-  const response = await axios.post('http://localhost:8000/account/rest-auth/login/', credentials);
+  const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/account/rest-auth/login/`, credentials);
   return response.data; // Return the user data
 });
 
 export const logoutUser = createAsyncThunk('auth/logout', async () => {
-  await axios.post('http://localhost:8000/account/rest-auth/logout/');
+  await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/account/rest-auth/logout/`);
 });
 
 export const signupUser = createAsyncThunk('auth/signup', async (userData) => {
-  const response = await axios.post('http://localhost:8000/account/rest-auth/registration', userData);
+  const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/account/rest-auth/registration/`, userData);
   return response.data;
 });
 
 export const loginWithGoogle = createAsyncThunk('auth/loginWithGoogle', async (authCode) => {
-  const response = await axios.post('http://localhost:8000/account/rest-auth/google/', { code: authCode });
+  const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/account/rest-auth/google/`, { code: authCode });
   return response.data; // Return user data if successful
 });
 
-// Fetch the current user data (for maintaining session across refresh)
+// export const fetchCurrentUser = createAsyncThunk('auth/fetchCurrentUser', async () => {
+//   const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/account/rest-auth/user/`);
+//   return response.data; // Return the current authenticated user data
+// });
 export const fetchCurrentUser = createAsyncThunk('auth/fetchCurrentUser', async () => {
-  const response = await axios.get('http://localhost:8000/account/rest-auth/user/');
+  const response = await axiosInstance.get(`/account/rest-auth/user/`);
   return response.data; // Return the current authenticated user data
 });
 
@@ -36,14 +39,15 @@ const authSlice = createSlice({
   name: 'auth',
   initialState: {
     user: null,
-    loading: false,
+    status: 'idle', 
     error: null,
     modalVisible: false,
-    modalMessage: '',  // Store the message to display in the modal
+    modalMessage: '', 
   },
   reducers: {
     clearError: (state) => {
       state.error = null;
+      state.status = 'idle';  
     },
     setUser: (state, action) => {
       state.user = action.payload;
@@ -53,67 +57,80 @@ const authSlice = createSlice({
     },
     showModal: (state, action) => {
       state.modalVisible = true;
-      state.modalMessage = action.payload; // Set the message for the modal
+      state.modalMessage = action.payload; 
     },
     hideModal: (state) => {
       state.modalVisible = false;
-      state.modalMessage = '';  // Clear the message when the modal is hidden
+      state.modalMessage = ''; 
     },
   },
   extraReducers: (builder) => {
-    const handlePending = (state) => {
-      state.loading = true;
-      state.error = null;
-    };
-
-    const handleFulfilled = (state, action) => {
-      state.loading = false;
-      state.user = action.payload;
-    };
-
-    const handleRejected = (state, action) => {
-      state.loading = false;
-      state.error = action.error.message;
-    };
-
     builder
-      .addCase(loginUser.pending, handlePending)
+      .addCase(loginUser.pending, (state) => {
+        state.status = 'loading';
+        state.error = null;
+      })
       .addCase(loginUser.fulfilled, (state, action) => {
-        handleFulfilled(state, action);
+        state.status = 'success';
+        state.user = action.payload;
+        localStorage.setItem("user","preserve")
         state.modalVisible = true;
         state.modalMessage = 'Login successful! Welcome back.';
       })
-      .addCase(loginUser.rejected, handleRejected)
-
+      .addCase(loginUser.rejected, (state, action) => {
+        state.status = 'error';
+        state.error = action.error.message;
+      })
       .addCase(logoutUser.fulfilled, (state) => {
         state.user = null;
+        state.status = 'success';
+        localStorage.removeItem("user")
         state.modalVisible = true;
         state.modalMessage = 'You have logged out successfully.';
       })
-
-      .addCase(signupUser.pending, handlePending)
+      .addCase(signupUser.pending, (state) => {
+        state.status = 'loading';
+      })
       .addCase(signupUser.fulfilled, (state, action) => {
-        handleFulfilled(state, action);
+        state.status = 'success';
+        state.user = action.payload;
         state.modalVisible = true;
         state.modalMessage = 'Signup successful! Welcome!';
       })
-      .addCase(signupUser.rejected, handleRejected)
-
-      .addCase(loginWithGoogle.pending, handlePending)
+      .addCase(signupUser.rejected, (state, action) => {
+        state.status = 'error';
+        state.error = action.error.message;
+      })
+      .addCase(loginWithGoogle.pending, (state) => {
+        state.status = 'loading';
+      })
       .addCase(loginWithGoogle.fulfilled, (state, action) => {
-        handleFulfilled(state, action);
+        state.status = 'success';
+        state.user = action.payload;
         state.modalVisible = true;
         state.modalMessage = 'Login with Google successful!';
       })
-      .addCase(loginWithGoogle.rejected, handleRejected)
-
-      .addCase(fetchCurrentUser.pending, handlePending)
-      .addCase(fetchCurrentUser.fulfilled, handleFulfilled)
-      .addCase(fetchCurrentUser.rejected, handleRejected);
+      .addCase(loginWithGoogle.rejected, (state, action) => {
+        state.status = 'error';
+        state.error = action.error.message;
+      })
+      .addCase(fetchCurrentUser.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(fetchCurrentUser.fulfilled, (state, action) => {
+        state.status = 'success';
+        state.user = action.payload;
+      })
+      .addCase(fetchCurrentUser.rejected, (state, action) => {
+        state.status = 'error';
+        state.error = action.error.message;
+      });
   },
 });
 
-// // Selector to check if the user is authenticated
+console.log('Auth Slice Loaded'); // Add this line
+
+// Selector to check if the user is authenticated
 export const selectIsAuthenticated = (state) => {
   return !!state.auth.user; // Only check if user data exists
 };
@@ -121,110 +138,3 @@ export const selectIsAuthenticated = (state) => {
 // Export actions
 export const { clearError, setUser, clearAuth, showModal, hideModal } = authSlice.actions;
 export default authSlice.reducer;
-
-
-// import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-// import axios from 'axios';
-
-// // axios.defaults.withCredentials = true; // Ensure cookies are sent with requests
-
-// // Async Thunks
-// export const loginUser = createAsyncThunk('auth/login', async (credentials) => {
-//   const response = await axios.post('http://localhost:8000/account/rest-auth/login/', credentials);
-//   return response.data; // Return the user data
-// });
-
-// export const logoutUser = createAsyncThunk('auth/logout', async () => {
-//   await axios.post('http://localhost:8000/account/rest-auth/logout/');
-// });
-
-// export const signupUser = createAsyncThunk('auth/signup', async (userData) => {
-//   const response = await axios.post('http://localhost:8000/account/rest-auth/registration/', userData);
-//   return response.data;
-// });
-
-// export const loginWithGoogle = createAsyncThunk('auth/loginWithGoogle', async (authCode) => {
-//   const response = await axios.post('http://localhost:8000/account/rest-auth/google/', { code: authCode });
-//   return response.data; // Return user data if successful
-// });
-
-// // Fetch the current user data (for maintaining session across refresh)
-// export const fetchCurrentUser = createAsyncThunk('auth/fetchCurrentUser', async () => {
-//   const response = await axios.get('http://localhost:8000/account/rest-auth/user/');
-//   return response.data; // Return the current authenticated user data
-// });
-
-// // Slice
-// const authSlice = createSlice({
-//   name: 'auth',
-//   initialState: {
-//     user: null,    // Store user data
-//     loading: false,
-//     error: null,
-//     modalVisible: false, 
-//   },
-//   reducers: {
-//     clearError: (state) => {
-//       state.error = null;
-//     },
-//     setUser: (state, action) => {
-//       state.user = action.payload; // Setter for user data
-//     },
-//     clearAuth: (state) => {
-//       state.user = null; // Clear user data on logout
-//     },
-//     showModal: (state) => {
-//       state.modalVisible = true;   // Set modal visibility to true
-//     },
-//     hideModal: (state) => {
-//       state.modalVisible = false;  // Set modal visibility to false
-//     }, 
-//   },
-//   extraReducers: (builder) => {
-//     const handlePending = (state) => {
-//       state.loading = true;
-//       state.error = null;
-//     };
-
-//     const handleFulfilled = (state, action) => {
-//       state.loading = false;
-//       state.user = action.payload; // Assuming the user data is in action.payload
-//     };
-
-//     const handleRejected = (state, action) => {
-//       state.loading = false;
-//       state.error = action.error.message; // Capture the error message
-//     };
-
-//     builder
-//       .addCase(loginUser.pending, handlePending)
-//       .addCase(loginUser.fulfilled, handleFulfilled)
-//       .addCase(loginUser.rejected, handleRejected)
-
-//       .addCase(logoutUser.fulfilled, (state) => {
-//         state.user = null; // Clear user data on logout
-//       })
-
-//       .addCase(signupUser.pending, handlePending)
-//       .addCase(signupUser.fulfilled, handleFulfilled)
-//       .addCase(signupUser.rejected, handleRejected)
-
-//       .addCase(loginWithGoogle.pending, handlePending)
-//       .addCase(loginWithGoogle.fulfilled, handleFulfilled)
-//       .addCase(loginWithGoogle.rejected, handleRejected)
-
-//       // Handle fetchCurrentUser
-//       .addCase(fetchCurrentUser.pending, handlePending)
-//       .addCase(fetchCurrentUser.fulfilled, handleFulfilled)
-//       .addCase(fetchCurrentUser.rejected, handleRejected);
-//   },
-// });
-
-// // Selector to check if the user is authenticated
-// export const selectIsAuthenticated = (state) => {
-//   return !!state.auth.user; // Only check if user data exists
-// };
-
-// // Export actions and reducer
-// export const { clearError, setUser, clearAuth } = authSlice.actions;
-// export default authSlice.reducer;

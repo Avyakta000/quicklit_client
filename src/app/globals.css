@@ -57,4 +57,19 @@ body {
   margin: 0;
   padding: 0;
 } */
+ 
+ /* Change the color of the NProgress bar to red */
+ #nprogress .bar {
+  background: #ff0000 !important; /* Red color */
+}
 
+/* Customize the spinner (if you're using it) to red */
+#nprogress .spinner-icon {
+  border-top-color: #ff0000 !important;
+  border-left-color: #ff0000 !important;
+}
+
+/* Change the color of the background glow/peg to red */
+#nprogress .peg {
+  box-shadow: 0 0 10px #ff0000, 0 0 5px #ff0000 !important;
+}

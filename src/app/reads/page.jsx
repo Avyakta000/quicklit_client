@@ -1,4 +1,4 @@
-"use client"; // Mark as a Client Component
+"use client"; 
 
 import { fetchReads } from "@/redux/features/readSlice";
 import Link from "next/link";
@@ -14,7 +14,7 @@ const ReadPage = () => {
     if (reads.length === 0) {
       dispatch(fetchReads());
     }
-  }, [dispatch, reads.length]); // Add reads.length as a dependency
+  }, [dispatch, reads.length]); 
 
   if (loading) {
     return <div className="text-center py-6">Loading...</div>;

@@ -2,26 +2,32 @@
 
 import { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser, clearError, loginWithGoogle, selectIsAuthenticated } from "@/redux/features/userAuth";
+import {
+  loginUser,
+  clearError,
+  loginWithGoogle,
+  selectIsAuthenticated,
+} from "@/redux/features/userAuth";
 import { useRouter, useSearchParams } from "next/navigation";
 import { FaGoogle } from "react-icons/fa";
+import Link from "next/link";
 
 const LoginPage = () => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const { loading, error } = useSelector((state) => state.auth);
+  const { status, error } = useSelector((state) => state.auth);
   const searchParams = useSearchParams();
   const isAuthenticated = useSelector(selectIsAuthenticated);
-  
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  
+
   // Ref to track if Google login has already been dispatched
   const hasDispatchedGoogleLogin = useRef(false);
 
   useEffect(() => {
     const code = searchParams.get("code");
-    
+
     // Only dispatch login if code is present and we haven't already dispatched it
     if (code && !isAuthenticated && !hasDispatchedGoogleLogin.current) {
       console.log(code, "code is present");
@@ -43,12 +49,13 @@ const LoginPage = () => {
 
   useEffect(() => {
     if (isAuthenticated) {
-      router.push("/");  // Redirect to home page if authenticated
+      router.push("/"); // Redirect to home page if authenticated
     }
   }, [isAuthenticated, router]);
 
   const handleGoogleLogin = () => {
-    const clientID = "802970042014-bbq707u390sn2nmcr7ujqn1src1b2po3.apps.googleusercontent.com"; 
+    const clientID =
+      "802970042014-bbq707u390sn2nmcr7ujqn1src1b2po3.apps.googleusercontent.com";
     const callBackURI = "http://localhost:3000/login"; // Replace with your callback URI
     const googleAuthURL = `https://accounts.google.com/o/oauth2/v2/auth?redirect_uri=${callBackURI}&prompt=consent&response_type=code&client_id=${clientID}&scope=openid%20email%20profile&access_type=offline`;
 
@@ -62,12 +69,17 @@ const LoginPage = () => {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">
+      <div className="w-full max-w-md p-8 space-y-4 bg-white rounded-lg shadow-md">
         <h2 className="text-2xl font-bold text-center text-blue-600">Log In</h2>
         {error && <p className="text-red-500">{error}</p>}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Email
+            </label>
             <input
               type="email"
               id="email"
@@ -79,7 +91,12 @@ const LoginPage = () => {
             />
           </div>
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Password
+            </label>
             <input
               type="password"
               id="password"
@@ -93,29 +110,34 @@ const LoginPage = () => {
           <button
             type="submit"
             className="w-full py-2 mt-2 font-semibold text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-500"
-            disabled={loading}
+            disabled={status==="loading"}
           >
-            {loading ? "Logging in..." : "Log In"}
+            {status==="loading" ? "Logging in..." : "Log In"}
           </button>
         </form>
-        <div className="flex items-center justify-center mt-2">
-          <span className="w-full h-px bg-gray-300"></span>
-          <span className="mx-4 text-gray-500">or</span>
-          <span className="w-full h-px bg-gray-300"></span>
+        <div className="flex items-center justify-center mt-4">
+          <hr className="flex-grow border-gray-300" />
+          <span className="mx-2 text-gray-500">or</span>
+          <hr className="flex-grow border-gray-300" />
         </div>
         <button
+          className="flex items-center justify-center w-full py-2 mt-0 font-semibold text-white bg-red-600 rounded-md hover:bg-red-700 focus:outline-none focus:ring focus:ring-red-500"
           onClick={handleGoogleLogin}
-          className="flex items-center justify-center w-full py-2 mt-2 font-semibold text-white bg-red-600 rounded-md hover:bg-red-700 focus:outline-none focus:ring focus:ring-red-500"
         >
           <FaGoogle /> <span className="mx-2">Log in with Google</span>
         </button>
+        <p className="text-sm text-center text-gray-500 mt-6">
+          New here ?
+          <Link href={"/signup"} className="text-blue-600 mx-1 underline">
+            Sign Up
+          </Link>
+        </p>
       </div>
     </div>
   );
 };
 
 export default LoginPage;
-
 
 // "use client";
 
@@ -128,7 +150,7 @@ export default LoginPage;
 // const LoginPage = () => {
 //   const router = useRouter();
 //   const dispatch = useDispatch();
-//   const { loading, error } = useSelector((state) => state.auth);
+//   const { status==="loading", error } = useSelector((state) => state.auth);
 //   const searchParams = useSearchParams();
 //   const isAuthenticated = useSelector(selectIsAuthenticated)
 
@@ -140,23 +162,23 @@ export default LoginPage;
 //     if (code && !isAuthenticated) {
 //       console.log(code, 'code is present');
 //       dispatch(loginWithGoogle(code));
-  
+
 //       // Clear the code from URL after successful dispatch
 //       const newUrl = window.location.origin + window.location.pathname;
 //       router.replace(newUrl);
 //     }
-  
+
 //     // Clear errors on page load
 //     dispatch(clearError());
 //   }, [searchParams, dispatch]);
-  
+
 //   // Redirect user if authenticated
 //   useEffect(() => {
 //     if (isAuthenticated) {
 //       router.push("/");  // Or any other authenticated page
 //     }
 //   }, [isAuthenticated, router]);
-  
+
 //   // useEffect(() => {
 //   //   dispatch(clearError());
 
@@ -176,7 +198,7 @@ export default LoginPage;
 //   // }, [user, router]);
 
 //   const handleGoogleLogin = () => {
-//     const clientID = "802970042014-bbq707u390sn2nmcr7ujqn1src1b2po3.apps.googleusercontent.com"; 
+//     const clientID = "802970042014-bbq707u390sn2nmcr7ujqn1src1b2po3.apps.googleusercontent.com";
 //     const callBackURI = "http://localhost:3000/login"; // Replace with your callback URI
 //     const googleAuthURL = `https://accounts.google.com/o/oauth2/v2/auth?redirect_uri=${callBackURI}&prompt=consent&response_type=code&client_id=${clientID}&scope=openid%20email%20profile&access_type=offline`;
 
@@ -221,9 +243,9 @@ export default LoginPage;
 //           <button
 //             type="submit"
 //             className="w-full py-2 mt-2 font-semibold text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-500"
-//             disabled={loading}
+//             disabled={status==="loading"}
 //           >
-//             {loading ? "Logging in..." : "Log In"}
+//             {status==="loading" ? "Logging in..." : "Log In"}
 //           </button>
 //         </form>
 //         <div className="flex items-center justify-center mt-2">
@@ -244,7 +266,6 @@ export default LoginPage;
 
 // export default LoginPage;
 
-
 // "use client";
 
 // import { useEffect, useState } from "react";
@@ -260,7 +281,7 @@ export default LoginPage;
 // const LoginPage = () => {
 //   const router = useRouter();
 //   const dispatch = useDispatch();
-//   const { user, loading, error } = useSelector((state) => state.auth);
+//   const { user, status==="loading", error } = useSelector((state) => state.auth);
 //   const [email, setEmail] = useState("");
 //   const [password, setPassword] = useState("");
 //   const searchParams = useSearchParams();
@@ -340,9 +361,9 @@ export default LoginPage;
 //             <button
 //               type="submit"
 //               className="w-full py-2 mt-2 font-semibold text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-500"
-//               disabled={loading} // Disable button while loading
+//               disabled={status==="loading"} // Disable button while status==="loading"
 //             >
-//               {loading ? "Logging in..." : "Log In"} {/* Show loading state */}
+//               {status==="loading" ? "Logging in..." : "Log In"} {/* Show status==="loading" state */}
 //             </button>
 //           </form>
 //           <div className="flex items-center justify-center mt-2">

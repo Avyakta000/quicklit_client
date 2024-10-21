@@ -11,10 +11,12 @@ import { Spinner } from "flowbite-react";
 
 export default function HomePage() {
   const dispatch = useDispatch();
-  const isAuthenticated = useSelector(selectIsAuthenticated); 
-  const { status, error, preferences } = useSelector(state => state.preferences);
-  const { modalVisible, modalMessage, } = useSelector(state => state.auth);
-  
+  const isAuthenticated = useSelector(selectIsAuthenticated);
+  const { status, error, preferences } = useSelector(
+    (state) => state.preferences
+  );
+  const { modalVisible, modalMessage } = useSelector((state) => state.auth);
+
   useEffect(() => {
     // Only fetch preferences if the user is authenticated
     if (isAuthenticated && status === "idle") {
@@ -27,33 +29,38 @@ export default function HomePage() {
     return (
       <>
         <ModalComponent
-        openModal={modalVisible}
-        setOpenModal={() => dispatch(hideModal())}  // Hide modal when closed
-        message={modalMessage}  // Pass the appropriate message
-      />
+          openModal={modalVisible}
+          setOpenModal={() => dispatch(hideModal())} // Hide modal when closed
+          message={modalMessage} // Pass the appropriate message
+        />
 
-      <div className="flex justify-center items-center h-screen bg-gray-100">
-        <main className="flex flex-col items-center justify-center">
-          <h1 className="text-4xl font-bold text-blue-600 mb-4">Welcome to QuickLit!</h1>
-          <p className="text-lg text-gray-700 mb-6 text-center max-w-xl">
-            Discover amazing content, learn new things, and join our community of enthusiasts.
-          </p>
-          <Link href='/login' className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-500 transition duration-300">
-            Get Started
-          </Link>
-        </main>
-      </div>
+        <div className="flex justify-center items-center h-screen bg-gray-100">
+          <main className="flex flex-col items-center justify-center">
+            <h1 className="text-4xl font-bold text-blue-600 mb-4">
+              Welcome to QuickLit!
+            </h1>
+            <p className="text-lg text-gray-700 mb-6 text-center max-w-xl">
+              Discover amazing content, learn new things, and join our community
+              of enthusiasts.
+            </p>
+            <Link
+              href="/login"
+              className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-500 transition duration-300"
+            >
+              Get Started
+            </Link>
+          </main>
+        </div>
       </>
     );
   }
-
 
   if (status === "loading") {
     // Show loading spinner while preferences are being fetched
     return (
       <div className="flex justify-center items-center h-screen">
         <div className="text-lg font-semibold text-gray-600">
-        <Spinner color="info" size="md" aria-label="Info" />
+          <Spinner color="info" size="md" aria-label="Info" />
         </div>
       </div>
     );
@@ -70,42 +77,53 @@ export default function HomePage() {
     );
   }
 
-  if ( preferences && preferences.length > 0) {
+  if (preferences && preferences.length > 0) {
     // If authenticated and preferences are available, show recommendations
     return (
-  
+      <>
+        <ModalComponent
+          openModal={modalVisible}
+          setOpenModal={() => dispatch(hideModal())} // Hide modal when closed
+          message={modalMessage} // Pass the appropriate message
+        />
         <main className="flex flex-col items-center justify-center h-screen bg-gray-100">
-          <h1 className="text-4xl font-bold text-blue-600 mb-4">Welcome Back QuickLit!</h1>
+          <h1 className="text-4xl font-bold text-blue-600 mb-4">
+            Welcome Back QuickLit!
+          </h1>
           <Recommendations />
         </main>
-    
+      </>
     );
   }
 
   // If the user is authenticated but has no preferences, prompt them to set preferences
   return (
     <div>
-          {/* Modal Component */}
-     <ModalComponent
+      {/* Modal Component */}
+      <ModalComponent
         openModal={modalVisible}
-        setOpenModal={() => dispatch(hideModal())}  // Hide modal when closed
-        message={modalMessage}  // Pass the appropriate message
+        setOpenModal={() => dispatch(hideModal())} // Hide modal when closed
+        message={modalMessage} // Pass the appropriate message
       />
 
       <main className="flex flex-col items-center justify-center h-screen bg-gray-100">
-        <h1 className="text-4xl font-bold text-blue-600 mb-4">Welcome Back to QuickLit!</h1>
+        <h1 className="text-4xl font-bold text-blue-600 mb-4">
+          Welcome Back to QuickLit!
+        </h1>
         <p className="text-lg text-gray-700 mb-6 text-center max-w-xl">
-          It seems you haven't set any preferences yet. Let's get started with that.
+          It seems you haven't set any preferences yet. Let's get started with
+          that.
         </p>
-        <Link href='/interests' className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-500 transition duration-300">
+        <Link
+          href="/interests"
+          className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-500 transition duration-300"
+        >
           Set Preferences
         </Link>
       </main>
     </div>
   );
-
 }
-
 
 // // src/app/page.js
 // "use client";
@@ -117,7 +135,6 @@ export default function HomePage() {
 // import { useEffect } from "react";
 // import { useDispatch, useSelector } from "react-redux";
 
-
 // export default function HomePage() {
 //   const dispatch = useDispatch()
 //   const isAuthenticated = useSelector(selectIsAuthenticated); // Get authentication state
@@ -128,8 +145,6 @@ export default function HomePage() {
 //       dispatch(fetchPreferences())
 //     }
 //   }, [status, dispatch])
-
-
 
 //   if (status === "loading") {
 //     return (
@@ -164,10 +179,8 @@ export default function HomePage() {
 //         {
 //           preferences ? <Recommendations/> : <Link href='/login' className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-500 transition duration-300">
 //           Get Started
-//         </Link>} 
-        
+//         </Link>}
 
-        
 //       </main>
 //     </div>
 //   );

@@ -1,4 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
+// import authReducer from './features/userAuth';
 import authReducer from './features/userAuth';
 import readReducer from './features/readSlice'
 import categoryReducer from './features/categorySlice'
@@ -11,8 +12,9 @@ const store = configureStore({
     reads: readReducer,
     categories: categoryReducer,
     recommendations: recommendationsReducer,
-    preferences:preferencesReducer,
+    preferences: preferencesReducer,
   },
 });
-
+// initial state
+// console.log(store.getState(), 'main store');
 export default store;
