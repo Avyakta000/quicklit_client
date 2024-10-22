@@ -4,10 +4,11 @@ import { fetchReads } from "@/redux/features/readSlice";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { PuffLoader } from "react-spinners";
 
 const ReadPage = () => {
   const dispatch = useDispatch();
-  const { reads, loading, error } = useSelector((state) => state.reads);
+  const { reads, status, error } = useSelector((state) => state.reads);
 
   // Use useEffect to fetch reads only if reads are empty
   useEffect(() => {
@@ -16,9 +17,13 @@ const ReadPage = () => {
     }
   }, [dispatch, reads.length]); 
 
-  if (loading) {
-    return <div className="text-center py-6">Loading...</div>;
-  }
+  if (status==="loading") {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <PuffLoader color="#36d7b7" size={100} />
+      </div>
+    );
+  } 
 
   if (error) {
     return <div className="text-center text-red-500 py-6">{error}</div>;
@@ -93,12 +98,12 @@ const ReadCard = ({ read }) => {
       )}
 
       <div className="flex justify-between mt-4">
-        <Link
+        {/* <Link
           href={`/reads/${read.slug}`} // Use slug for better SEO
           className="inline-block px-4 py-2 text-white bg-blue-600 rounded hover:bg-blue-700 transition"
         >
           Read More
-        </Link>
+        </Link> */}
         <div className="flex space-x-2">
           <button className="text-gray-500 hover:text-blue-600">
             👍 Like

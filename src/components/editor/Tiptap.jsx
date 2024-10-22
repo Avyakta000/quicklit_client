@@ -29,6 +29,13 @@ const Tiptap = ({setContent}) => {
   const content = ``;
 
   const editor = useEditor({
+    editorProps: {
+      attributes: {
+        class:
+          "border-2 border-gray-400 mt-4 rounded-md min-h-[100px] p-2 focus:outline-blue-400",
+      },
+    },
+
     extensions,
     content,
     injectCSS: false,
@@ -37,6 +44,7 @@ const Tiptap = ({setContent}) => {
         // Call setContent with the current editor content whenever it updates
         setContent(editor.getHTML()); // Get the content in HTML format
       },
+    
   });
 
   // const handleImageRequestOnActions = async (file,action) => {
@@ -179,215 +187,378 @@ const Tiptap = ({setContent}) => {
   }
 
   return (
+    // <div className="max-w-lg mx-auto mt-4">
+    //   <div className="border border-slate-300 rounded-lg p-5 sticky top-3 left-0 right-0 bg-white z-10 flex gap-0.5 flex-wrap">
+    //     <button onClick={addImage}>
+    //       <CiImageOn />
+    //     </button>
+
+    //     {/* Toolbar buttons for text formatting */}
+    //     <button
+    //       onClick={() =>
+    //         editor.chain().focus().toggleHeading({ level: 1 }).run()
+    //       }
+    //       className={`editor-btn font-black ${
+    //         editor.isActive("heading", { level: 1 }) && "active-editor-btn"
+    //       }`}
+    //     >
+    //       H1
+    //     </button>
+    //     <button
+    //       onClick={() =>
+    //         editor.chain().focus().toggleHeading({ level: 2 }).run()
+    //       }
+    //       className={`editor-btn font-extrabold ${
+    //         editor.isActive("heading", { level: 2 }) && "active-editor-btn"
+    //       }`}
+    //     >
+    //       H2
+    //     </button>
+    //     <button
+    //       onClick={() =>
+    //         editor.chain().focus().toggleHeading({ level: 3 }).run()
+    //       }
+    //       className={`editor-btn font-semibold ${
+    //         editor.isActive("heading", { level: 3 }) && "active-editor-btn"
+    //       }`}
+    //     >
+    //       H3
+    //     </button>
+    //     <button
+    //       onClick={() =>
+    //         editor.chain().focus().toggleHeading({ level: 4 }).run()
+    //       }
+    //       className={`editor-btn font-medium ${
+    //         editor.isActive("heading", { level: 4 }) && "active-editor-btn"
+    //       }`}
+    //     >
+    //       H4
+    //     </button>
+    //     <button
+    //       onClick={() =>
+    //         editor.chain().focus().toggleHeading({ level: 5 }).run()
+    //       }
+    //       className={`editor-btn font-normal ${
+    //         editor.isActive("heading", { level: 5 }) && "active-editor-btn"
+    //       }`}
+    //     >
+    //       H5
+    //     </button>
+    //     <button
+    //       onClick={() =>
+    //         editor.chain().focus().toggleHeading({ level: 6 }).run()
+    //       }
+    //       className={`editor-btn font-normal ${
+    //         editor.isActive("heading", { level: 6 }) && "active-editor-btn"
+    //       }`}
+    //     >
+    //       H6
+    //     </button>
+    //     <button
+    //       onClick={() => editor.chain().focus().toggleBold().run()}
+    //       disabled={!editor.can().chain().focus().toggleBold().run()}
+    //       className={`editor-btn ${
+    //         editor.isActive("bold") && "active-editor-btn"
+    //       }`}
+    //     >
+    //       <AiOutlineBold />
+    //     </button>
+    //     <button
+    //       onClick={() => editor.chain().focus().toggleItalic().run()}
+    //       disabled={!editor.can().chain().focus().toggleItalic().run()}
+    //       className={`editor-btn ${
+    //         editor.isActive("italic") && "active-editor-btn"
+    //       }`}
+    //     >
+    //       <AiOutlineItalic />
+    //     </button>
+    //     <button
+    //       onClick={() => editor.chain().focus().toggleStrike().run()}
+    //       disabled={!editor.can().chain().focus().toggleStrike().run()}
+    //       className={`editor-btn ${
+    //         editor.isActive("strike") && "active-editor-btn"
+    //       }`}
+    //     >
+    //       <AiOutlineStrikethrough />
+    //     </button>
+    //     <button
+    //       onClick={() => editor.chain().focus().toggleCode().run()}
+    //       disabled={!editor.can().chain().focus().toggleCode().run()}
+    //       className={`editor-btn ${
+    //         editor.isActive("code") && "active-editor-btn"
+    //       }`}
+    //     >
+    //       <FiCode />
+    //     </button>
+    //     <button
+    //       onClick={() => editor.chain().focus().unsetAllMarks().run()}
+    //       className={`editor-btn`}
+    //     >
+    //       <MdOutlineLayersClear />
+    //     </button>
+    //     <button
+    //       onClick={() => editor.chain().focus().clearNodes().run()}
+    //       className={`editor-btn`}
+    //     >
+    //       <AiOutlineClose />
+    //     </button>
+    //     <button
+    //       onClick={() => editor.chain().focus().setParagraph().run()}
+    //       className={`editor-btn ${
+    //         editor.isActive("paragraph") && "active-editor-btn"
+    //       }`}
+    //     >
+    //       <BiParagraph />
+    //     </button>
+    //     <button
+    //       onClick={() => editor.chain().focus().toggleBulletList().run()}
+    //       className={`editor-btn ${
+    //         editor.isActive("bulletList") && "active-editor-btn"
+    //       }`}
+    //     >
+    //       <AiOutlineUnorderedList />
+    //     </button>
+    //     <button
+    //       onClick={() => editor.chain().focus().toggleOrderedList().run()}
+    //       className={`editor-btn ${
+    //         editor.isActive("orderedList") && "active-editor-btn"
+    //       }`}
+    //     >
+    //       <AiOutlineOrderedList />
+    //     </button>
+    //     <button
+    //       onClick={() => editor.chain().focus().toggleCodeBlock().run()}
+    //       className={`editor-btn ${
+    //         editor.isActive("codeBlock") && "active-editor-btn"
+    //       }`}
+    //     >
+    //       <PiCodeBlock />
+    //     </button>
+    //     <button
+    //       onClick={() => editor.chain().focus().toggleBlockquote().run()}
+    //       className={`editor-btn ${
+    //         editor.isActive("blockquote") && "active-editor-btn"
+    //       }`}
+    //     >
+    //       <PiQuotes />
+    //     </button>
+    //     <button
+    //       onClick={() => editor.chain().focus().setHorizontalRule().run()}
+    //       className={`editor-btn`}
+    //     >
+    //       <TbSpacingVertical />
+    //     </button>
+    //     <button
+    //       onClick={() => editor.chain().focus().setHardBreak().run()}
+    //       className={`editor-btn`}
+    //     >
+    //       <AiOutlineEnter />
+    //     </button>
+    //     <button
+    //       onClick={() => editor.chain().focus().undo().run()}
+    //       disabled={!editor.can().chain().focus().undo().run()}
+    //       className={`editor-btn`}
+    //     >
+    //       <AiOutlineUndo />
+    //     </button>
+    //     <button
+    //       onClick={() => editor.chain().focus().redo().run()}
+    //       disabled={!editor.can().chain().focus().redo().run()}
+    //       className={`editor-btn`}
+    //     >
+    //       <AiOutlineRedo />
+    //     </button>
+    //   </div>
+
+    //   <div className="prose max-w-lg mx-auto mt-4">
+    //     <EditorContent editor={editor} />
+    //   </div>
+
+    //   {/* Display uploaded images with delete option */}
+    //   <div className="mt-4">
+    //     <h3>Uploaded Images</h3>
+    //     <ul>
+    //       {imageList.map((imageUrl) => (
+    //         <li key={imageUrl} className="flex justify-between items-center">
+    //           <img
+    //             src={imageUrl}
+    //             alt="Uploaded"
+    //             className="h-16 w-16 object-cover"
+    //           />
+    //           <button
+    //             onClick={() => deleteImage(imageUrl)}
+    //             className="ml-2 text-red-500"
+    //           >
+    //             Delete
+    //           </button>
+    //         </li>
+    //       ))}
+    //     </ul>
+    //   </div>
+    // </div>
+
     <div className="max-w-lg mx-auto mt-4">
-      <div className="border border-slate-300 rounded-lg p-5 sticky top-3 left-0 right-0 bg-white z-10 flex gap-0.5 flex-wrap">
-        <button onClick={addImage}>
-          <CiImageOn />
-        </button>
+    <div className="border border-slate-300 rounded-lg p-5 sticky top-3 bg-white z-10 flex flex-wrap gap-2 shadow-lg">
+      <button onClick={addImage} className="editor-btn">
+        <CiImageOn className="text-lg" />
+      </button>
 
-        {/* Toolbar buttons for text formatting */}
+      {/* Toolbar buttons for text formatting */}
+      {[1, 2, 3, 4, 5, 6].map((level) => (
         <button
-          onClick={() =>
-            editor.chain().focus().toggleHeading({ level: 1 }).run()
-          }
-          className={`editor-btn font-black ${
-            editor.isActive("heading", { level: 1 }) && "active-editor-btn"
-          }`}
-        >
-          H1
-        </button>
-        <button
-          onClick={() =>
-            editor.chain().focus().toggleHeading({ level: 2 }).run()
-          }
-          className={`editor-btn font-extrabold ${
-            editor.isActive("heading", { level: 2 }) && "active-editor-btn"
-          }`}
-        >
-          H2
-        </button>
-        <button
-          onClick={() =>
-            editor.chain().focus().toggleHeading({ level: 3 }).run()
-          }
-          className={`editor-btn font-semibold ${
-            editor.isActive("heading", { level: 3 }) && "active-editor-btn"
-          }`}
-        >
-          H3
-        </button>
-        <button
-          onClick={() =>
-            editor.chain().focus().toggleHeading({ level: 4 }).run()
-          }
-          className={`editor-btn font-medium ${
-            editor.isActive("heading", { level: 4 }) && "active-editor-btn"
-          }`}
-        >
-          H4
-        </button>
-        <button
-          onClick={() =>
-            editor.chain().focus().toggleHeading({ level: 5 }).run()
-          }
-          className={`editor-btn font-normal ${
-            editor.isActive("heading", { level: 5 }) && "active-editor-btn"
-          }`}
-        >
-          H5
-        </button>
-        <button
-          onClick={() =>
-            editor.chain().focus().toggleHeading({ level: 6 }).run()
-          }
-          className={`editor-btn font-normal ${
-            editor.isActive("heading", { level: 6 }) && "active-editor-btn"
-          }`}
-        >
-          H6
-        </button>
-        <button
-          onClick={() => editor.chain().focus().toggleBold().run()}
-          disabled={!editor.can().chain().focus().toggleBold().run()}
+          key={level}
+          onClick={() => editor.chain().focus().toggleHeading({ level }).run()}
           className={`editor-btn ${
-            editor.isActive("bold") && "active-editor-btn"
+            editor.isActive("heading", { level }) && "active-editor-btn"
           }`}
         >
-          <AiOutlineBold />
+          H{level}
         </button>
-        <button
-          onClick={() => editor.chain().focus().toggleItalic().run()}
-          disabled={!editor.can().chain().focus().toggleItalic().run()}
-          className={`editor-btn ${
-            editor.isActive("italic") && "active-editor-btn"
-          }`}
-        >
-          <AiOutlineItalic />
-        </button>
-        <button
-          onClick={() => editor.chain().focus().toggleStrike().run()}
-          disabled={!editor.can().chain().focus().toggleStrike().run()}
-          className={`editor-btn ${
-            editor.isActive("strike") && "active-editor-btn"
-          }`}
-        >
-          <AiOutlineStrikethrough />
-        </button>
-        <button
-          onClick={() => editor.chain().focus().toggleCode().run()}
-          disabled={!editor.can().chain().focus().toggleCode().run()}
-          className={`editor-btn ${
-            editor.isActive("code") && "active-editor-btn"
-          }`}
-        >
-          <FiCode />
-        </button>
-        <button
-          onClick={() => editor.chain().focus().unsetAllMarks().run()}
-          className={`editor-btn`}
-        >
-          <MdOutlineLayersClear />
-        </button>
-        <button
-          onClick={() => editor.chain().focus().clearNodes().run()}
-          className={`editor-btn`}
-        >
-          <AiOutlineClose />
-        </button>
-        <button
-          onClick={() => editor.chain().focus().setParagraph().run()}
-          className={`editor-btn ${
-            editor.isActive("paragraph") && "active-editor-btn"
-          }`}
-        >
-          <BiParagraph />
-        </button>
-        <button
-          onClick={() => editor.chain().focus().toggleBulletList().run()}
-          className={`editor-btn ${
-            editor.isActive("bulletList") && "active-editor-btn"
-          }`}
-        >
-          <AiOutlineUnorderedList />
-        </button>
-        <button
-          onClick={() => editor.chain().focus().toggleOrderedList().run()}
-          className={`editor-btn ${
-            editor.isActive("orderedList") && "active-editor-btn"
-          }`}
-        >
-          <AiOutlineOrderedList />
-        </button>
-        <button
-          onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-          className={`editor-btn ${
-            editor.isActive("codeBlock") && "active-editor-btn"
-          }`}
-        >
-          <PiCodeBlock />
-        </button>
-        <button
-          onClick={() => editor.chain().focus().toggleBlockquote().run()}
-          className={`editor-btn ${
-            editor.isActive("blockquote") && "active-editor-btn"
-          }`}
-        >
-          <PiQuotes />
-        </button>
-        <button
-          onClick={() => editor.chain().focus().setHorizontalRule().run()}
-          className={`editor-btn`}
-        >
-          <TbSpacingVertical />
-        </button>
-        <button
-          onClick={() => editor.chain().focus().setHardBreak().run()}
-          className={`editor-btn`}
-        >
-          <AiOutlineEnter />
-        </button>
-        <button
-          onClick={() => editor.chain().focus().undo().run()}
-          disabled={!editor.can().chain().focus().undo().run()}
-          className={`editor-btn`}
-        >
-          <AiOutlineUndo />
-        </button>
-        <button
-          onClick={() => editor.chain().focus().redo().run()}
-          disabled={!editor.can().chain().focus().redo().run()}
-          className={`editor-btn`}
-        >
-          <AiOutlineRedo />
-        </button>
-      </div>
+      ))}
 
-      <div className="prose max-w-lg mx-auto mt-4">
-        <EditorContent editor={editor} />
-      </div>
-
-      {/* Display uploaded images with delete option */}
-      <div className="mt-4">
-        <h3>Uploaded Images</h3>
-        <ul>
-          {imageList.map((imageUrl) => (
-            <li key={imageUrl} className="flex justify-between items-center">
-              <img
-                src={imageUrl}
-                alt="Uploaded"
-                className="h-16 w-16 object-cover"
-              />
-              <button
-                onClick={() => deleteImage(imageUrl)}
-                className="ml-2 text-red-500"
-              >
-                Delete
-              </button>
-            </li>
-          ))}
-        </ul>
-      </div>
+      <button
+        onClick={() => editor.chain().focus().toggleBold().run()}
+        disabled={!editor.can().chain().focus().toggleBold().run()}
+        className={`editor-btn ${
+          editor.isActive("bold") && "active-editor-btn"
+        }`}
+      >
+        <AiOutlineBold className="text-lg" />
+      </button>
+      <button
+        onClick={() => editor.chain().focus().toggleItalic().run()}
+        disabled={!editor.can().chain().focus().toggleItalic().run()}
+        className={`editor-btn ${
+          editor.isActive("italic") && "active-editor-btn"
+        }`}
+      >
+        <AiOutlineItalic className="text-lg" />
+      </button>
+      <button
+        onClick={() => editor.chain().focus().toggleStrike().run()}
+        disabled={!editor.can().chain().focus().toggleStrike().run()}
+        className={`editor-btn ${
+          editor.isActive("strike") && "active-editor-btn"
+        }`}
+      >
+        <AiOutlineStrikethrough className="text-lg" />
+      </button>
+      <button
+        onClick={() => editor.chain().focus().toggleCode().run()}
+        disabled={!editor.can().chain().focus().toggleCode().run()}
+        className={`editor-btn ${
+          editor.isActive("code") && "active-editor-btn"
+        }`}
+      >
+        <FiCode className="text-lg" />
+      </button>
+      <button
+        onClick={() => editor.chain().focus().unsetAllMarks().run()}
+        className="editor-btn"
+      >
+        <MdOutlineLayersClear className="text-lg" />
+      </button>
+      <button
+        onClick={() => editor.chain().focus().clearNodes().run()}
+        className="editor-btn"
+      >
+        <AiOutlineClose className="text-lg" />
+      </button>
+      <button
+        onClick={() => editor.chain().focus().setParagraph().run()}
+        className={`editor-btn ${
+          editor.isActive("paragraph") && "active-editor-btn"
+        }`}
+      >
+        <BiParagraph className="text-lg" />
+      </button>
+      <button
+        onClick={() => editor.chain().focus().toggleBulletList().run()}
+        className={`editor-btn ${
+          editor.isActive("bulletList") && "active-editor-btn"
+        }`}
+      >
+        <AiOutlineUnorderedList className="text-lg" />
+      </button>
+      <button
+        onClick={() => editor.chain().focus().toggleOrderedList().run()}
+        className={`editor-btn ${
+          editor.isActive("orderedList") && "active-editor-btn"
+        }`}
+      >
+        <AiOutlineOrderedList className="text-lg" />
+      </button>
+      <button
+        onClick={() => editor.chain().focus().toggleCodeBlock().run()}
+        className={`editor-btn ${
+          editor.isActive("codeBlock") && "active-editor-btn"
+        }`}
+      >
+        <PiCodeBlock className="text-lg" />
+      </button>
+      <button
+        onClick={() => editor.chain().focus().toggleBlockquote().run()}
+        className={`editor-btn ${
+          editor.isActive("blockquote") && "active-editor-btn"
+        }`}
+      >
+        <PiQuotes className="text-lg" />
+      </button>
+      <button
+        onClick={() => editor.chain().focus().setHorizontalRule().run()}
+        className="editor-btn"
+      >
+        <TbSpacingVertical className="text-lg" />
+      </button>
+      <button
+        onClick={() => editor.chain().focus().setHardBreak().run()}
+        className="editor-btn"
+      >
+        <AiOutlineEnter className="text-lg" />
+      </button>
+      <button
+        onClick={() => editor.chain().focus().undo().run()}
+        disabled={!editor.can().chain().focus().undo().run()}
+        className="editor-btn"
+      >
+        <AiOutlineUndo className="text-lg" />
+      </button>
+      <button
+        onClick={() => editor.chain().focus().redo().run()}
+        disabled={!editor.can().chain().focus().redo().run()}
+        className="editor-btn"
+      >
+        <AiOutlineRedo className="text-lg" />
+      </button>
     </div>
+
+    <div className="prose max-w-lg mx-auto mt-4">
+        <EditorContent editor={editor} />
+    </div>
+    
+
+    {/* Display uploaded images with delete option */}
+    <div className="mt-4">
+      <h3 className="font-semibold text-lg">Uploaded Images</h3>
+      <ul className="list-none">
+        {imageList.map((imageUrl) => (
+          <li key={imageUrl} className="flex justify-between items-center mt-2">
+            <img
+              src={imageUrl}
+              alt="Uploaded"
+              className="h-16 w-16 object-cover rounded-md shadow"
+            />
+            <button
+              onClick={() => deleteImage(imageUrl)}
+              className="ml-2 text-red-500 hover:text-red-700 transition duration-200"
+            >
+              Delete
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
   );
 };
 

@@ -47,6 +47,36 @@ body {
   }
 }
 
+/* Scrollbar Styles */
+.scrollbar {
+  overflow-y: auto; /* Allow vertical scrolling */
+}
+
+.scrollbar::-webkit-scrollbar {
+  width: 12px; /* Width of the scrollbar */
+}
+
+.scrollbar::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Background of the scrollbar track */
+  border-radius: 6px; /* Rounded corners for the track */
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  background: #888; /* Color of the scrollbar handle */
+  border-radius: 6px; /* Rounded corners for the thumb */
+}
+
+.scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Color of the scrollbar handle on hover */
+}
+
+/* Firefox scrollbar */
+.scrollbar {
+  scrollbar-width: thin; /* Makes the scrollbar thin */
+  scrollbar-color: #888 #f1f1f1; /* thumb color, track color */
+}
+
+/* typography for tiptap */
 .prose pre {
   margin: 0;
   padding: 5;
@@ -72,4 +102,27 @@ body {
 /* Change the color of the background glow/peg to red */
 #nprogress .peg {
   box-shadow: 0 0 10px #ff0000, 0 0 5px #ff0000 !important;
+}
+
+
+
+
+
+/* Editor Toolbar button styles */
+.editor-btn {
+  background-color: transparent; 
+  border: none; 
+  cursor: pointer; 
+  padding: 4px; 
+  transition: background-color 0.2s, color 0.2s; 
+}
+
+.editor-btn:hover {
+  background-color: #e0f2fe;
+}
+
+.active-editor-btn {
+  background-color: #3b82f6; 
+  color: white; 
+  border-radius: 4px;
 }

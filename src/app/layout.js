@@ -3,6 +3,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import { Providers } from "@/redux/providers";
 import { LoadingProvider } from "@/components/nprogress/LoadingContext";
+import Footer from "@/components/Footer";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -30,6 +31,7 @@ export default function RootLayout({ children }) {
         <LoadingProvider> {/* Wrap with LoadingProvider */}
             <Header />
             {children}
+            <Footer/>
           </LoadingProvider>
       </body>
     </html>

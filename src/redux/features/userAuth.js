@@ -107,6 +107,7 @@ const authSlice = createSlice({
       .addCase(loginWithGoogle.fulfilled, (state, action) => {
         state.status = 'success';
         state.user = action.payload;
+        localStorage.setItem("user","preserve")
         state.modalVisible = true;
         state.modalMessage = 'Login with Google successful!';
       })

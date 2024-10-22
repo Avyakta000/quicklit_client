@@ -1,3 +1,4 @@
+import axiosInstance from '@/utils/axiosInstance';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
@@ -21,7 +22,7 @@ export const savePreferences = createAsyncThunk(
   'preferences/savePreferences',
   async (preferences, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/preferences/`, preferences);
+      const response = await axiosInstance.post(`/api/preferences/`, preferences);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.detail || error.message);

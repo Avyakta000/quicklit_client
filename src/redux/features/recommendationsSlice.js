@@ -1,12 +1,14 @@
+import axiosInstance from '@/utils/axiosInstance';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-
+axios.defaults.withCredentials = true
 // Async thunk to fetch recommendations from the backend
+
 export const fetchRecommendations = createAsyncThunk(
   'recommendations/fetchRecommendations',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/recommended-reads/`); // Update with your backend API URL
+      const response = await axiosInstance.get(`/api/recommended-reads/`); // Update with your backend API URL
       return response.data;
     } catch (error) {
       console.log('error recommendations ', error.response.data)
@@ -40,5 +42,11 @@ const recommendationsSlice = createSlice({
       });
   },
 });
+
+export const selectRecommendationBySlug = (state, slug) => {
+  console.log(slug, 'slug');
+  console.log(state.recommendations.recommendations, 'data recommendations');
+  return state.recommendations.recommendations.find(recommendations => recommendations.slug === slug);
+}
 
 export default recommendationsSlice.reducer;

@@ -1,5 +1,6 @@
 "use client";
 import { fetchRecommendations } from "@/redux/features/recommendationsSlice";
+import Link from "next/link";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -10,19 +11,15 @@ const Recommendations = () => {
   );
 
   useEffect(() => {
-      console.log(status, 'status')
-    if (status=='idle'){
-        console.log(status, 'idle')
-        dispatch(fetchRecommendations());
+    if (status === "idle") {
+      dispatch(fetchRecommendations());
     }
   }, [dispatch, status]);
 
   if (status === "loading") {
     return (
       <div className="flex justify-center items-center h-screen">
-        <div className="text-lg font-semibold text-gray-600">
-          Loading recommendations...
-        </div>
+        <PuffLoader color="#36d7b7" size={100} />
       </div>
     );
   }
@@ -38,34 +35,37 @@ const Recommendations = () => {
   }
 
   return (
-    <div className="max-w-xl mx-auto bg-gray-200 py-10 px-4">
-      <h1 className="text-3xl font-bold text-center text-gray-900 mb-8">
+    <div className="max-w-xl p-5 bg-gray-900 rounded-md">
+      <h1 className="mb-2 text-4xl p-2 text-center font-semibold text-gray-200/50">
         Your Personalized Recommendations
       </h1>
 
       {recommendations?.length === 0 ? (
-        <div className="text-center text-md text-gray-600">
+        <div className="text-center text-lg text-gray-600">
           No recommendations available. Please update your preferences.
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {recommendations.map((item) => (
             <div
               key={item.id}
-              className="relative h-40 border border-[3px] border-white rounded-md overflow-hidden group"
+              className="relative h-52 bg-white border border-gray-200 rounded-lg overflow-hidden shadow-lg transform transition-all duration-300 hover:shadow-2xl hover:scale-105"
             >
-              <div className="p-4">
-                <h2 className="text-sm font-semibold text-gray-800 mb-2">
+              <div className="p-5">
+                <h2 className="text-lg font-semibold text-gray-800 mb-3">
                   {item.title}
                 </h2>
                 <div
-                  className="prose text-[15px]"
+                  className="text-gray-600 text-sm overflow-hidden max-h-20"
                   dangerouslySetInnerHTML={{ __html: item.content }}
                 />
               </div>
-              <div className="absolute bottom-4 left-4 bg-blue-600 text-white px-4 py-1 rounded-lg text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                Explore More
-              </div>
+              <Link
+                href={`recommendations/${item.slug}`}
+                className="bg-blue-600 absolute left-4 bottom-4 text-white p-2 rounded-md"
+              >
+                Read More
+              </Link>
             </div>
           ))}
         </div>

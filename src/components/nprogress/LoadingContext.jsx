@@ -2,7 +2,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { createContext, useContext, useEffect, useOptimistic } from "react";
+import { createContext, useContext, useEffect, startTransition, useOptimistic } from "react";
 import NProgress from "nprogress"; // Make sure this is installed
 import "nprogress/nprogress.css";
 
@@ -17,7 +17,9 @@ export const LoadingProvider = ({ children }) => {
     const push = router.push;
 
     router.push = function patched(...args) {
-      setLoading(true);
+      startTransition(() => {
+        setLoading(true);
+      });
       push.apply(history, args);
     };
   }, [router]);
