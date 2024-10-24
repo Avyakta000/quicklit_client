@@ -41,6 +41,10 @@ const preferencesSlice = createSlice({
     clearPreferences: (state) => {
       state.preferences = null;
     },
+    resetPreferencesStatus(state) {
+      state.status = 'idle';
+      state.error = null;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -73,5 +77,5 @@ const preferencesSlice = createSlice({
   },
 });
 
-export const { clearPreferences } = preferencesSlice.actions;
+export const { clearPreferences, resetPreferencesStatus } = preferencesSlice.actions;
 export default preferencesSlice.reducer;

@@ -1,5 +1,6 @@
 // app/reads/[slug]/page.js
 "use client";
+import Layout from "@/components/Layout";
 import { selectReadBySlug } from "@/redux/features/readSlice";
 import React from "react";
 import { useSelector } from "react-redux";
@@ -16,6 +17,8 @@ const ReadDetailPage = ({ params }) => {
   }
 
   return (
+    <Layout>
+
     <div className="bg-gray-100 py-6">
       <div className="mx-auto max-w-2xl">
         <header className="text-center mb-6">
@@ -34,12 +37,14 @@ const ReadDetailPage = ({ params }) => {
 
         <div className="prose mx-auto">
           <div dangerouslySetInnerHTML={{ __html: read.content }} />
-        <pre className="m-0 p-0"></pre>
-        <code className="m-0 p-0"></code>
+        {/* <pre className="m-0 p-0"></pre>
+        <code className="m-0 p-0"></code> */}
         </div>
         {/* <p className="text-gray-600">{read.content}</p> */}
       </div>
     </div>
+    </Layout>
+
   );
 };
 

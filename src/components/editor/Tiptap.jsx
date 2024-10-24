@@ -32,7 +32,7 @@ const Tiptap = ({setContent}) => {
     editorProps: {
       attributes: {
         class:
-          "border-2 border-gray-400 mt-4 rounded-md min-h-[100px] p-2 focus:outline-blue-400",
+          "border-2 border-gray-400 bg-white mt-4 rounded-md min-h-[100px] p-2 focus:outline-blue-600",
       },
     },
 
@@ -107,11 +107,14 @@ const Tiptap = ({setContent}) => {
         );
         const { url } = response.data;
 
-        await axios.put(url, file, {
+        const responseAws = await axios.put(url, file, {
           headers: {
             "Content-Type": file.type,
           },
         });
+        if(responseAws.status===200){
+          alert("image uploaded !!"); // Alert user on error
+        }
       
       const imageUrl = url.split("?")[0]; // URL without query params
 
@@ -141,7 +144,7 @@ const Tiptap = ({setContent}) => {
         );
 
         if (response.status===200){
-          alert("image deleted"); // Alert user on error
+          alert("image deleted !!"); // Alert user on error
         }
  
         // const { url } = response.data;
@@ -397,7 +400,7 @@ const Tiptap = ({setContent}) => {
     //   </div>
     // </div>
 
-    <div className="max-w-lg mx-auto mt-4">
+    <div className="max-w-2xl mx-auto mt-4">
     <div className="border border-slate-300 rounded-lg p-5 sticky top-3 bg-white z-10 flex flex-wrap gap-2 shadow-lg">
       <button onClick={addImage} className="editor-btn">
         <CiImageOn className="text-lg" />
@@ -532,14 +535,14 @@ const Tiptap = ({setContent}) => {
       </button>
     </div>
 
-    <div className="prose max-w-lg mx-auto mt-4">
+    <div className="prose max-w-2xl mx-auto mt-4">
         <EditorContent editor={editor} />
     </div>
     
 
     {/* Display uploaded images with delete option */}
     <div className="mt-4">
-      <h3 className="font-semibold text-lg">Uploaded Images</h3>
+      <h3 className="font-semibold text-white text-lg">Uploaded Images</h3>
       <ul className="list-none">
         {imageList.map((imageUrl) => (
           <li key={imageUrl} className="flex justify-between items-center mt-2">

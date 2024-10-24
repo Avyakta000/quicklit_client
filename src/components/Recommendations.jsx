@@ -1,8 +1,10 @@
 "use client";
+
 import { fetchRecommendations } from "@/redux/features/recommendationsSlice";
 import Link from "next/link";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { PuffLoader } from "react-spinners";
 
 const Recommendations = () => {
   const dispatch = useDispatch();
@@ -18,15 +20,15 @@ const Recommendations = () => {
 
   if (status === "loading") {
     return (
-      <div className="flex justify-center items-center h-screen">
-        <PuffLoader color="#36d7b7" size={100} />
+      <div className="flex justify-center items-center h-screen bg-gradient-to-br from-gray-900 to-gray-700">
+        <PuffLoader color="#4A90E2" size={100} />
       </div>
     );
   }
 
   if (status === "failed") {
     return (
-      <div className="flex justify-center items-center h-screen">
+      <div className="flex justify-center items-center h-screen bg-gray-900">
         <div className="text-lg font-semibold text-red-500">
           Failed to load recommendations: {error}
         </div>
@@ -35,38 +37,57 @@ const Recommendations = () => {
   }
 
   return (
-    <div className="max-w-xl p-5 bg-gray-900 rounded-md">
-      <h1 className="mb-2 text-4xl p-2 text-center font-semibold text-gray-200/50">
+    <div className="w-full min-h-screen p-8 bg-gradient-to-br from-gray-900 to-gray-800">
+      <h1 className="mb-8 text-white text-4xl text-center font-extrabold text-transparent bg-clip-text">
         Your Personalized Recommendations
       </h1>
 
       {recommendations?.length === 0 ? (
-        <div className="text-center text-lg text-gray-600">
+        <div className="text-center text-lg text-gray-300">
           No recommendations available. Please update your preferences.
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="space-y-8">
           {recommendations.map((item) => (
-            <div
+            <Link
               key={item.id}
-              className="relative h-52 bg-white border border-gray-200 rounded-lg overflow-hidden shadow-lg transform transition-all duration-300 hover:shadow-2xl hover:scale-105"
+              href={`recommendations/${item.slug}`}
+              className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-6 w-full p-6 border border-transparent transition-all duration-300 hover:border-blue-500 hover:shadow-neon"
             >
-              <div className="p-5">
-                <h2 className="text-lg font-semibold text-gray-800 mb-3">
+              {/* Use image as background if available */}
+              <div
+                className="w-full sm:w-1/3 h-64 bg-cover bg-center rounded-lg"
+                style={{
+                  backgroundImage: `url(${item.image || "/placeholder.jpg"})`,
+                }}
+              />
+
+              {/* Text Content */}
+              <div className="flex-1 text-left">
+                <h2 className="text-2xl font-bold text-gray-100 mb-2">
                   {item.title}
                 </h2>
+                <p className="text-gray-400 text-sm mb-4">
+                  {item.created_at} by {item.author_full_name}
+                </p>
+
+                {/* Render the HTML content preview */}
                 <div
-                  className="text-gray-600 text-sm overflow-hidden max-h-20"
-                  dangerouslySetInnerHTML={{ __html: item.content }}
+                  className="text-sm text-gray-300 max-h-24 overflow-hidden leading-snug"
+                  dangerouslySetInnerHTML={{
+                    __html:
+                      item.content.length > 200
+                        ? item.content.substring(0, 200) + "..."
+                        : item.content,
+                  }}
                 />
+
+                {/* Read more button */}
+                <div className="mt-4 text-blue-400 hover:underline">
+                  Read More
+                </div>
               </div>
-              <Link
-                href={`recommendations/${item.slug}`}
-                className="bg-blue-600 absolute left-4 bottom-4 text-white p-2 rounded-md"
-              >
-                Read More
-              </Link>
-            </div>
+            </Link>
           ))}
         </div>
       )}
