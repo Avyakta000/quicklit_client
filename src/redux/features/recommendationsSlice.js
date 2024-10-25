@@ -25,7 +25,13 @@ const recommendationsSlice = createSlice({
     status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed'
     error: null,
   },
-  reducers: {},
+  reducers: {
+    clearRecommendations: (state) => {
+      state.recommendations = [];
+      state.status = 'idle';
+      state.error = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchRecommendations.pending, (state) => {
@@ -49,4 +55,5 @@ export const selectRecommendationBySlug = (state, slug) => {
   return state.recommendations.recommendations.find(recommendations => recommendations.slug === slug);
 }
 
+export const { clearRecommendations } = recommendationsSlice.actions;
 export default recommendationsSlice.reducer;

@@ -28,6 +28,7 @@ const PostRead = () => {
   const [alert, setAlert] = useState(null);
   const [content, setContent] = useState("");
   const [title, setTitle] = useState("");
+  const [topic, setTopics] = useState([])
   const [coverImage, setCoverImage] = useState(null); // Cover image file state
 
   // Fetch categories and topics on component mount
@@ -74,10 +75,11 @@ const PostRead = () => {
     const formData = new FormData();
     formData.append("title", title);
     formData.append("categories", selectedCategories[0]?.id);
-    formData.append(
-      "topics",
-      selectedTopics.map((topic) => topic.id)
-    );
+    selectedTopics.forEach((topic) => formData.append("topics", topic.id));
+    // formData.append(
+    //   "topics",
+    //   // JSON.stringify(selectedTopics.map((topic) => parseInt(topic.id)))
+    // );
     formData.append("content", content);
     if (coverImage) {
       console.log(coverImage, "cover image");

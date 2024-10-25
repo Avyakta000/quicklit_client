@@ -12,16 +12,16 @@ const ReadPage = () => {
   const { reads, status, error } = useSelector((state) => state.reads);
 
   useEffect(() => {
-    if (reads.length === 0) {
+    if (status==="idle") {
       dispatch(fetchReads());
     }
 
-    return () => {
-      // Cleanup function to reset status on unmount
-      dispatch(resetReadStatus());
-      console.log("Resetting read status on unmount");
-    };
-  }, [dispatch, reads.length]);
+    // return () => {
+    //   // Cleanup function to reset status on unmount
+    //   dispatch(resetReadStatus());
+    //   // console.log("Resetting read status on unmount");
+    // };
+  }, [dispatch, status]);
 
   if (error) {
     return <div className="text-center text-red-500 py-6">{error}</div>;
@@ -30,11 +30,11 @@ const ReadPage = () => {
   return (
     <Layout>
       <div className="bg-gray-900 py-6 min-h-screen">
-        {status === "loading" && (
+        {status === "loading" && 
           <div className="flex justify-center items-center h-screen">
             <PuffLoader color="#007bff" size={100} />
           </div>
-        )}
+        }
         <div className="mx-auto max-w-4xl px-6">
           <header className="text-center mb-10">
             <h1 className="text-5xl font-extrabold text-white">All Reads</h1>

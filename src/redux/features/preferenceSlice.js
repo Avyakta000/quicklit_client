@@ -40,6 +40,7 @@ const preferencesSlice = createSlice({
   reducers: {
     clearPreferences: (state) => {
       state.preferences = null;
+      state.status = 'idle'
     },
     resetPreferencesStatus(state) {
       state.status = 'idle';

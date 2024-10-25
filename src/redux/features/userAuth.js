@@ -56,8 +56,8 @@ const authSlice = createSlice({
       state.user = null;
       state.status = 'idle'; 
       state.error = null; 
-      state.modalVisible = false;
-      state.modalMessage = '';
+      // state.modalVisible = false;
+      // state.modalMessage = '';
     },
     showModal: (state, action) => {
       state.modalVisible = true;
@@ -76,7 +76,7 @@ const authSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.status = 'success';
-        state.user = action.payload;
+        state.user = action.payload.user;
         localStorage.setItem("q_exp", new Date(action.payload.refresh_token_expiration).toISOString());
         state.modalVisible = true;
         state.modalMessage = 'Login successful! Welcome back.';
@@ -96,7 +96,7 @@ const authSlice = createSlice({
       })
       .addCase(signupUser.fulfilled, (state, action) => {
         state.status = 'success';
-        state.user = action.payload;
+        state.user = action.payload.user;
         localStorage.setItem("q_exp", new Date(action.payload.refresh_token_expiration).toISOString());
         state.modalVisible = true;
         state.modalMessage = 'Signup successful! Welcome!';
@@ -110,7 +110,7 @@ const authSlice = createSlice({
       })
       .addCase(loginWithGoogle.fulfilled, (state, action) => {
         state.status = 'success';
-        state.user = action.payload;
+        state.user = action.payload.user;
         localStorage.setItem("q_exp", new Date(action.payload.refresh_token_expiration).toISOString());
         state.modalVisible = true;
         state.modalMessage = 'Login with Google successful!';

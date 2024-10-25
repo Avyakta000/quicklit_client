@@ -4,6 +4,7 @@ import axiosInstance from '@/utils/axiosInstance';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
+axios.defaults.withCredentials = true
 // Async thunk to fetch reads
 export const fetchReads = createAsyncThunk('reads/fetchReads', async () => {
   const response = await axios.get('http://localhost:8000/api/blogs/');

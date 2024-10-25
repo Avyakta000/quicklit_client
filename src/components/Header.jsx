@@ -15,7 +15,9 @@ import ModalComponent from "./ModalComponent";
 import Link from "next/link";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
+import { clearRecommendations } from "@/redux/features/recommendationsSlice";
+import { handleLogout } from "@/utils/helper";
 
 export default function Header() {
   const router = useRouter();
@@ -23,11 +25,14 @@ export default function Header() {
   const isAuthenticated = useSelector(selectIsAuthenticated); // Get authentication state
   const { modalVisible, modalMessage, status } = useSelector((state) => state.auth);
 
-  const handleLogout = () => {
-    dispatch(logoutUser());
-    dispatch(clearPreferences());
-    router.push("/");
-  };
+  // const handleLogout = () => {
+  //   dispatch(logoutUser());
+  //   dispatch(clearPreferences());
+  //   dispatch(clearRecommendations());
+  //   localStorage.removeItem("q_exp");
+  //   router.push("/")
+  // };
+  
 
   useEffect(() => {
     const checkExpiration = () => {
@@ -54,9 +59,14 @@ export default function Header() {
 
     // Set an interval to check every minute (or adjust as necessary)
 
-    const intervalId = setInterval(checkExpiration, 60000);
+    // const intervalId = setInterval(checkExpiration, 60000);
 
-    return () => clearInterval(intervalId); // Cleanup on unmount
+    return () => {
+
+      console.log('unmount check expiration')
+
+    }; 
+    // return () => clearInterval(intervalId); // Cleanup on unmount
   }, [dispatch, router]);
 
   return (
@@ -95,7 +105,7 @@ export default function Header() {
                     </Link>
                   </li>
                   <li>
-                    <button onClick={handleLogout}>
+                    <button onClick={()=>handleLogout(dispatch, router)}>
                       <FiLogOut className="text-gray-600 hover:text-blue-500 text-xl" />
                     </button>
                   </li>
@@ -108,3 +118,4 @@ export default function Header() {
     </>
   );
 }
+

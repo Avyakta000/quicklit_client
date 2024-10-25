@@ -110,13 +110,14 @@
 
 "use client";
 
+import { setUser } from "@/redux/features/userAuth";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 
 const Profile = () => {
   const { user } = useSelector((state) => state.auth);
   const { preferences } = useSelector((state) => state.preferences);
-
+  // console.log(user, 'profile')
   const [activeTab, setActiveTab] = useState("preferences"); // Track active tab
 
   return (
