@@ -18,7 +18,6 @@ const ReadDetailPage = ({ params }) => {
 
   return (
     <Layout>
-
     <div className="bg-gray-100 py-6">
       <div className="mx-auto max-w-2xl">
         <header className="text-center mb-6">
@@ -27,13 +26,20 @@ const ReadDetailPage = ({ params }) => {
             {read.created_at} by {read.author_full_name}
           </p>
         </header>
-        {read.images.length > 0 && (
+        {/* {read.images.length > 0 && (
           <img
             src={read.images[0].image}
             alt={read.title}
             className="w-full h-72 object-cover rounded-lg mb-4"
           />
-        )}
+        )} */}
+          {read?.cover_image && (
+        <img
+          src={read.cover_image}
+          alt={read.title}
+          className="w-full h-64 object-cover rounded-t-xl"
+        />
+      )}
 
         <div className="prose mx-auto">
           <div dangerouslySetInnerHTML={{ __html: read.content }} />

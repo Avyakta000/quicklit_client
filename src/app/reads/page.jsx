@@ -1,7 +1,7 @@
 "use client";
 
 import Layout from "@/components/Layout";
-import { fetchReads } from "@/redux/features/readSlice";
+import { fetchReads, resetReadStatus } from "@/redux/features/readSlice";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,15 +15,13 @@ const ReadPage = () => {
     if (reads.length === 0) {
       dispatch(fetchReads());
     }
-  }, [dispatch, reads.length]);
 
-  if (status === "loading") {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <PuffLoader color="#36d7b7" size={100} />
-      </div>
-    );
-  }
+    return () => {
+      // Cleanup function to reset status on unmount
+      dispatch(resetReadStatus());
+      console.log("Resetting read status on unmount");
+    };
+  }, [dispatch, reads.length]);
 
   if (error) {
     return <div className="text-center text-red-500 py-6">{error}</div>;
@@ -32,6 +30,11 @@ const ReadPage = () => {
   return (
     <Layout>
       <div className="bg-gray-900 py-6 min-h-screen">
+        {status === "loading" && (
+          <div className="flex justify-center items-center h-screen">
+            <PuffLoader color="#007bff" size={100} />
+          </div>
+        )}
         <div className="mx-auto max-w-4xl px-6">
           <header className="text-center mb-10">
             <h1 className="text-5xl font-extrabold text-white">All Reads</h1>
@@ -63,9 +66,9 @@ const ReadCard = ({ read }) => {
 
   return (
     <div className="bg-gray-800 text-white rounded-xl shadow-lg border border-transparent transition-all duration-300 hover:border-blue-400 hover:shadow-neon">
-      {read?.images?.length > 0 && (
+      {read?.cover_image && (
         <img
-          src={read.images[0].image}
+          src={read.cover_image}
           alt={read.title}
           className="w-full h-64 object-cover rounded-t-xl"
         />
@@ -103,8 +106,12 @@ const ReadCard = ({ read }) => {
             Read More
           </Link>
           <div className="flex space-x-4">
-            <button className="text-gray-400 hover:text-blue-400">👍 Like</button>
-            <button className="text-gray-400 hover:text-blue-400">💬 Comment</button>
+            <button className="text-gray-400 hover:text-blue-400">
+              👍 Like
+            </button>
+            <button className="text-gray-400 hover:text-blue-400">
+              💬 Comment
+            </button>
           </div>
         </div>
       </div>

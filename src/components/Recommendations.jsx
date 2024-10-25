@@ -18,23 +18,23 @@ const Recommendations = () => {
     }
   }, [dispatch, status]);
 
-  if (status === "loading") {
-    return (
-      <div className="flex justify-center items-center h-screen bg-gradient-to-br from-gray-900 to-gray-700">
-        <PuffLoader color="#4A90E2" size={100} />
-      </div>
-    );
-  }
+  // if (status === "loading") {
+  //   return (
+  //     <div className="flex justify-center items-center h-screen bg-gradient-to-br from-gray-900 to-gray-700">
+  //       <PuffLoader color="#4A90E2" size={100} />
+  //     </div>
+  //   );
+  // }
 
-  if (status === "failed") {
-    return (
-      <div className="flex justify-center items-center h-screen bg-gray-900">
-        <div className="text-lg font-semibold text-red-500">
-          Failed to load recommendations: {error}
-        </div>
-      </div>
-    );
-  }
+  // if (status === "failed") {
+  //   return (
+  //     <div className="flex justify-center items-center h-screen bg-gray-900">
+  //       <div className="text-lg font-semibold text-red-500">
+  //         Failed to load recommendations: {error}
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="w-full min-h-screen p-8 bg-gradient-to-br from-gray-900 to-gray-800">
@@ -58,7 +58,7 @@ const Recommendations = () => {
               <div
                 className="w-full sm:w-1/3 h-64 bg-cover bg-center rounded-lg"
                 style={{
-                  backgroundImage: `url(${item.image || "/placeholder.jpg"})`,
+                  backgroundImage: `url(${item.cover_image || "https://flowbite.com/docs/images/examples/image-1@2x.jpg"})`,
                 }}
               />
 

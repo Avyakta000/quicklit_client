@@ -14,7 +14,11 @@ export const fetchReads = createAsyncThunk('reads/fetchReads', async () => {
 export const postRead = createAsyncThunk(
   'reads/postRead',
   async (readData) => {
-    const response = await axiosInstance.post('/api/blogs/', readData);
+    const response = await axiosInstance.post('/api/blogs/', readData,{
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
     return response.data; // Return the newly created read
   }
 );
@@ -51,7 +55,7 @@ const readSlice = createSlice({
         state.status = 'loading'; // Set status to loading
       })
       .addCase(postRead.fulfilled, (state, action) => {
-        state.reads.push(action.payload); // Add the new read to the state
+        // state.reads.push(action.payload); // Add the new read to the state
         state.status = 'success'; // Set status to success
         console.log('Posted new read:', action.payload); // Debugging line
       })

@@ -2,6 +2,7 @@
 
 import { clearPreferences } from "@/redux/features/preferenceSlice";
 import {
+  clearAuth,
   fetchCurrentUser,
   hideModal,
   logoutUser,
@@ -20,7 +21,7 @@ export default function Header() {
   const router = useRouter();
   const dispatch = useDispatch();
   const isAuthenticated = useSelector(selectIsAuthenticated); // Get authentication state
-  const { modalVisible, modalMessage } = useSelector((state) => state.auth);
+  const { modalVisible, modalMessage, status } = useSelector((state) => state.auth);
 
   const handleLogout = () => {
     dispatch(logoutUser());
@@ -29,10 +30,34 @@ export default function Header() {
   };
 
   useEffect(() => {
-    if (localStorage.getItem("user")) {
-      dispatch(fetchCurrentUser());
-    }
-  }, [dispatch]);
+    const checkExpiration = () => {
+      const expiration = localStorage.getItem("q_exp");
+      console.log("this hitting .....")
+      if (expiration) {
+        const expTime = new Date(expiration).getTime(); // Convert to milliseconds
+        const currentTime = Date.now();
+        console.log(expTime, currentTime, 'exp time and curr time')
+        if (currentTime >= expTime) {
+          alert("state removed")
+          // If expired, clear the localStorage
+          dispatch(clearAuth())
+          localStorage.removeItem("q_exp");
+          // Optionally, handle logout or redirection
+        } else {
+          // Fetch current user if not expired
+          dispatch(fetchCurrentUser());
+        }
+      }
+    };
+
+    checkExpiration();
+
+    // Set an interval to check every minute (or adjust as necessary)
+
+    const intervalId = setInterval(checkExpiration, 60000);
+
+    return () => clearInterval(intervalId); // Cleanup on unmount
+  }, [dispatch, router]);
 
   return (
     <>

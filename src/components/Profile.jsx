@@ -121,7 +121,7 @@ const Profile = () => {
 
   return (
     <>
-      <div className="max-w-4xl mx-auto p-4 bg-gray-800 text-white rounded-lg shadow-md">
+      <div className=" mx-auto p-6 bg-gray-800 text-white rounded-lg shadow-md">
         <div className="flex items-center space-x-2">
           <img
             src="https://st3.depositphotos.com/3333565/19449/v/450/depositphotos_194499612-stock-illustration-artificial-intelligence-head-line-design.jpg"
@@ -138,14 +138,14 @@ const Profile = () => {
       </div>
 
       {/* Tabs Navigation */}
-      <div className="mt-4 max-w-4xl mx-auto">
+      <div className="mt-2 mx-auto">
         <nav className="flex space-x-2 border-b-2 mb-1 border-gray-700">
           <button
             onClick={() => setActiveTab("preferences")}
-            className={`py-2 px-4 text-sm font-medium rounded-t-md ${
+            className={`py-3 px-4 text-sm font-medium rounded-t-md ${
               activeTab === "preferences"
                 ? "bg-blue-600 text-white"
-                : "text-gray-400 font-semibold hover:text-white"
+                : "text-gray-400 font-semibold hover:text-blue-600"
             }`}
           >
             Preferences
@@ -156,7 +156,7 @@ const Profile = () => {
             className={`py-2 px-4 text-sm font-medium rounded-t-md ${
               activeTab === "profile"
                 ? "bg-blue-600 text-white"
-                : "text-gray-400 font-semibold hover:text-white"
+                : "text-gray-400 font-semibold hover:text-blue-600"
             }`}
           >
             Edit info

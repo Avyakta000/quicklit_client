@@ -18,7 +18,6 @@ const RecommendationsDetailPage = ({ params }) => {
 
   return (
     <Layout>
-
     <div className="bg-gray-100 py-6">
       <div className="mx-auto max-w-2xl">
         <header className="text-center mb-6">

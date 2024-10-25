@@ -11,7 +11,7 @@ const Layout = ({ children }) => {
     <div className="flex w-full max-w-[1000px]">
       {
         isAuthenticated && 
-      <div className="w-1/4 mt-2 p-2 mb-2 rounded-md border-r border-gray-300">
+      <div className="w-[300px] mt-2 p-2 mb-2 rounded-md border-r border-gray-300">
         <Profile />
       </div>
       }
