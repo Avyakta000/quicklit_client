@@ -1,7 +1,6 @@
 // components/CommentSystem.jsx
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import useWebSocket from "@/hooks/useWebSocket"; // Adjust the path
 import { FaRegCommentDots, FaRegThumbsUp, FaEllipsisH } from "react-icons/fa";
 import { fetchComments, addComment as addCommentAction, editComment, deleteComment } from "@/redux/features/commentsSlice";
 
@@ -12,23 +11,8 @@ const CommentSystem = ({ readId }) => {
   const [editingCommentId, setEditingCommentId] = useState(null);
   const [editingCommentText, setEditingCommentText] = useState("");
 
-  // WebSocket URL
-  const socketUrl = `ws://localhost:8000/ws/comments/${readId}/`;
 
   // Handle incoming WebSocket messages
-  const handleIncomingMessage = (data) => {
-    if (data.action === 'add') {
-      dispatch(addCommentAction(data.comment));
-    } else if (data.action === 'edit') {
-      dispatch(editComment({ id: data.comment.id, comment: { text: data.comment.text } }));
-    } else if (data.action === 'delete') {
-      dispatch(deleteComment(data.comment.id));
-    }
-  };
-
-  // Use WebSocket for real-time comment updates
-  useWebSocket(socketUrl, handleIncomingMessage);
-
   useEffect(() => {
     dispatch(fetchComments(readId)); // Fetch comments on component mount
   }, [dispatch, readId]);

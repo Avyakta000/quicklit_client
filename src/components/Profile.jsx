@@ -113,13 +113,14 @@
 import { setUser } from "@/redux/features/userAuth";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
+import { PuffLoader } from "react-spinners";
 
 const Profile = () => {
   const { user } = useSelector((state) => state.auth);
-  const { preferences } = useSelector((state) => state.preferences);
+  const { preferences, status } = useSelector((state) => state.preferences);
   // console.log(user, 'profile')
   const [activeTab, setActiveTab] = useState("preferences"); // Track active tab
-
+  
   return (
     <>
       <div className=" mx-auto p-6 bg-gray-800 text-white rounded-lg shadow-md">
@@ -185,7 +186,7 @@ const Profile = () => {
           {activeTab === "preferences" && (
             <div>
               <h2 className="text-lg font-semibold mb-4">Your Preferences</h2>
-              {preferences?.map((preference, index) => (
+              {Array.isArray(preferences) && preferences.length > 0 ? (preferences?.map((preference, index) => (
                 <div key={index} className="mb-6">
                   <div className="mb-3">
                     <h2 className="text-md font-semibold">Categories</h2>
@@ -227,7 +228,9 @@ const Profile = () => {
                     )}
                   </div>
                 </div>
-              ))}
+              ))) : (
+                <p>No preferences found.</p>
+              )}
             </div>
           )}
         </div>

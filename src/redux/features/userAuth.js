@@ -12,7 +12,7 @@ export const loginUser = createAsyncThunk('auth/login', async (credentials) => {
 });
 
 export const logoutUser = createAsyncThunk('auth/logout', async () => {
-  await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/account/rest-auth/logout/`);
+  await axiosInstance.post(`/account/rest-auth/logout/`);
 });
 
 export const signupUser = createAsyncThunk('auth/signup', async (userData) => {

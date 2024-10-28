@@ -19,7 +19,7 @@ export const editComment = createAsyncThunk('comments/editComment', async ({ id,
     return response.data;
 });
 
-export const deleteComment = createAsyncThunk('comments/deleteComment', async ({id}) => {
+export const deleteComment = createAsyncThunk('comments/deleteComment', async (id) => {
     await axiosInstance.delete(`/api/comments/${id}/`, { withCredentials: true });
     return id; // Return the id of the deleted comment for state update
 });

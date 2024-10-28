@@ -14,29 +14,32 @@ const CategorySelection = () => {
   const router = useRouter();
   const [alert, setAlert] = useState(null); 
   const { categories, topics, selectedCategories, selectedTopics, status, error } = useSelector((state) => state.categories);
-  const { status:statusPreferences, error:errorPreferences } = useSelector((state) => state.preferences);
+  const { preferences,status:statusPreferences, error:errorPreferences } = useSelector((state) => state.preferences);
   
   const [showTopics, setShowTopics] = useState(false); // Toggle between categories and topics view
 
-  useEffect(() => {
-    // Reset preferences status when the component mounts
-    dispatch(resetPreferencesStatus());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   // Reset preferences status when the component mounts
+  //   dispatch(resetPreferencesStatus());
+  // }, [dispatch]);
 
   useEffect(() => {
     if(status==="idle"){
+      // dispatch(resetPreferencesStatus());
       dispatch(fetchCategories());
     }
   }, [status, dispatch]);
 
   useEffect(() => {
-    if (statusPreferences === "succeeded") {
+    if (statusPreferences === "succeeded" && preferences!==null) {
       setAlert({ type: 'success', message: 'Preferences Set Successfully' });
       dispatch(clearSelections());
-      dispatch(fetchRecommendations())
+      dispatch(fetchRecommendations());
       router.push("/");
+    } else if (statusPreferences === "failed") {
+      setAlert({ type: 'error', message: errorPreferences || "Failed to save preferences" });
     }
-  }, [router, statusPreferences, dispatch]);
+  }, [statusPreferences, preferences, dispatch, router, errorPreferences]);
 
 
   const handleSelectCategory = (category) => {
