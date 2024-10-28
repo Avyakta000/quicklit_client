@@ -1,5 +1,6 @@
 // app/reads/[slug]/page.js
 "use client";
+import CommentSystem from "@/components/Comments";
 import Layout from "@/components/Layout";
 import { selectReadBySlug } from "@/redux/features/readSlice";
 import React from "react";
@@ -47,6 +48,8 @@ const ReadDetailPage = ({ params }) => {
         <code className="m-0 p-0"></code> */}
         </div>
         {/* <p className="text-gray-600">{read.content}</p> */}
+        <CommentSystem readId={read.id} />
+
       </div>
     </div>
     </Layout>

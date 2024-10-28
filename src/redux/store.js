@@ -5,6 +5,7 @@ import readReducer from './features/readSlice'
 import categoryReducer from './features/categorySlice'
 import recommendationsReducer from './features/recommendationsSlice';
 import preferencesReducer from './features/preferenceSlice';
+import commentsReducer from './features/commentsSlice';
 
 const store = configureStore({
   reducer: {
@@ -13,6 +14,7 @@ const store = configureStore({
     categories: categoryReducer,
     recommendations: recommendationsReducer,
     preferences: preferencesReducer,
+    comments: commentsReducer,
   },
 });
 // initial state

@@ -7,15 +7,20 @@ import {
   clearError,
   loginWithGoogle,
   selectIsAuthenticated,
+  clearAuth,
 } from "@/redux/features/userAuth";
 import { useRouter, useSearchParams } from "next/navigation";
 import { FaGoogle } from "react-icons/fa";
 import Link from "next/link";
+import { handleLogout } from "@/utils/helper";
+import { clearRecommendations } from "@/redux/features/recommendationsSlice";
+import { clearPreferences } from "@/redux/features/preferenceSlice";
 
 const LoginPage = () => {
+
   const router = useRouter();
   const dispatch = useDispatch();
-  const { status, error } = useSelector((state) => state.auth);
+  const { status, error, user } = useSelector((state) => state.auth);
   const searchParams = useSearchParams();
   const isAuthenticated = useSelector(selectIsAuthenticated);
 
@@ -27,7 +32,22 @@ const LoginPage = () => {
 
   useEffect(() => {
     const code = searchParams.get("code");
+    const redirected = searchParams.get("redirected");
 
+    if (redirected==="unauthenticated" && !isAuthenticated) {
+      console.log('stat x-auth-status', redirected)
+      dispatch(clearAuth())
+      dispatch(clearPreferences());
+      dispatch(clearRecommendations());
+      localStorage.removeItem("q_exp");
+      // handleLogout(dispatch, router)
+    }
+    if(status==="success" && isAuthenticated){
+      // im having to do this because the state still exists after being redirected by middleware since i dont want to go to 
+      
+      console.log(isAuthenticated, user, 'yes authenticated')
+      router.push("/")
+    }
     // Only dispatch login if code is present and we haven't already dispatched it
     if (code && !isAuthenticated && !hasDispatchedGoogleLogin.current) {
       console.log(code, "code is present");
@@ -44,14 +64,8 @@ const LoginPage = () => {
     }
 
     // Clear errors on page load
-    dispatch(clearError());
+    // dispatch(clearError());
   }, [searchParams, dispatch, isAuthenticated, router]);
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      router.push("/"); // Redirect to home page if authenticated
-    }
-  }, [isAuthenticated, router]);
 
   const handleGoogleLogin = () => {
     const clientID =
