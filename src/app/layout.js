@@ -5,6 +5,7 @@ import Header from "@/components/Header";
 import { Providers } from "@/redux/providers";
 import { LoadingProvider } from "@/components/nprogress/LoadingContext";
 import Footer from "@/components/Footer";
+import { usePathname} from "next/navigation";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -24,7 +25,9 @@ const geistMono = localFont({
 
 
 export default function RootLayout({ children }) {
-
+  const pathname = usePathname()
+  const noFooterRoutes = ['/signup', '/login'];
+  console.log(pathname, 'pathname')
   return (
     <Providers>
 
@@ -37,7 +40,9 @@ export default function RootLayout({ children }) {
             <main className="flex-grow">
               {children}
             </main>
+            {!noFooterRoutes.includes(pathname) && (
             <Footer/>
+            )}
           </LoadingProvider>
       </body>
     </html>

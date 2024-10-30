@@ -22,7 +22,7 @@ export const LoadingProvider = ({ children }) => {
       });
       push.apply(history, args);
     };
-  }, [router]);
+  }, [router, setLoading]);
 
   useEffect(() => {
     NProgress.configure({ showSpinner: false });

@@ -7,7 +7,7 @@ import axios from 'axios';
 axios.defaults.withCredentials = true
 // Async thunk to fetch reads
 export const fetchReads = createAsyncThunk('reads/fetchReads', async () => {
-  const response = await axios.get('http://localhost:8000/api/blogs/');
+  const response = await axiosInstance.get('/api/blogs/');
   return response.data; // Return the data directly from the response
 });
 

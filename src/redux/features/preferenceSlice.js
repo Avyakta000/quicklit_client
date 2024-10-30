@@ -9,7 +9,7 @@ export const fetchPreferences = createAsyncThunk(
   'preferences/fetchPreferences',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/preferences/`);
+      const response = await axiosInstance.get(`/api/preferences/`);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.detail || error.message);

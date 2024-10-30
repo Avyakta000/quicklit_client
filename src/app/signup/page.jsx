@@ -60,8 +60,12 @@ const SignupPage = () => {
 
   return (
     <>
+    <div className="h-[calc(100vh-68px)]" style={{ backgroundImage: "url('https://static.vecteezy.com/system/resources/thumbnails/050/503/588/small_2x/a-close-up-of-a-wave-in-the-ocean-photo.jpeg')", backgroundRepeat: "no-repeat",
+      backgroundSize: "cover", }}>
+
+  
       {openModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+        <div className="top-16 z-40 fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           {alert && <CustomAlert {...alert} onDismiss={() => setAlert(null)} />}
           <div className="relative w-full max-w-md p-10 bg-white rounded-lg shadow-lg">
             <button
@@ -193,6 +197,7 @@ const SignupPage = () => {
           </div>
         </div>
       )}
+      </div>
     </>
   );
 };

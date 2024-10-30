@@ -2,6 +2,7 @@
 
 import Layout from "@/components/Layout";
 import { fetchReads, resetReadStatus } from "@/redux/features/readSlice";
+import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { BiLike } from "react-icons/bi";
@@ -68,7 +69,7 @@ const ReadPage = () => {
 //   return (
 //     <div className="bg-gray-800 text-white rounded-xl shadow-lg border border-transparent transition-all duration-300 hover:border-blue-400 hover:shadow-neon">
 //       {read?.cover_image && (
-//         <img
+//         <Image
 //           src={read.cover_image}
 //           alt={read.title}
 //           className="w-full h-64 object-cover rounded-t-xl"
@@ -135,11 +136,15 @@ const ReadCard = ({ read }) => {
     <>
     <div className="bg-gray-800 text-white rounded-xl shadow-lg border border-transparent transition-all duration-300 hover:border-blue-400 hover:shadow-neon">
       {read?.cover_image && (
-        <img
-          src={read.cover_image}
-          alt={read.title}
-          className="w-full h-64 object-cover rounded-t-xl"
+        <div className="relative w-full h-64"> {/* Set a relative container with a defined height */}
+          <Image
+            src={read.cover_image}
+            alt={read.title}
+            layout="fill" 
+            objectFit="cover"
+            className="rounded-t-xl"
           />
+        </div>
       )}
       <div className="p-6">
         <Link href={`/reads/${read.slug}`} className="text-2xl font-bold mb-2">{read.title}</Link>

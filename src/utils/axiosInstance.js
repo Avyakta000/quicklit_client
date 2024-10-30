@@ -13,7 +13,7 @@ export const injectStore = (_store, _router) => {
 // Create Axios instance
 const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BACKEND_URL, 
-  timeout: 10000, 
+  timeout: 20000, 
   headers: {
     'Content-Type': 'application/json',
   },

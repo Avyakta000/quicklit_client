@@ -23,7 +23,9 @@ export default function Header() {
   const router = useRouter();
   const dispatch = useDispatch();
   const isAuthenticated = useSelector(selectIsAuthenticated); // Get authentication state
-  const { modalVisible, modalMessage, status } = useSelector((state) => state.auth);
+  const { modalVisible, modalMessage, status } = useSelector(
+    (state) => state.auth
+  );
 
   // const handleLogout = () => {
   //   dispatch(logoutUser());
@@ -32,20 +34,19 @@ export default function Header() {
   //   localStorage.removeItem("q_exp");
   //   router.push("/")
   // };
-  
 
   useEffect(() => {
     const checkExpiration = () => {
       const expiration = localStorage.getItem("q_exp");
-      console.log("this hitting .....")
+      console.log("this hitting .....");
       if (expiration) {
         const expTime = new Date(expiration).getTime(); // Convert to milliseconds
         const currentTime = Date.now();
-        console.log(expTime, currentTime, 'exp time and curr time')
+        console.log(expTime, currentTime, "exp time and curr time");
         if (currentTime >= expTime) {
-          alert("state removed")
+          alert("state removed");
           // If expired, clear the localStorage
-          dispatch(clearAuth())
+          dispatch(clearAuth());
           localStorage.removeItem("q_exp");
           // Optionally, handle logout or redirection
         } else {
@@ -62,10 +63,8 @@ export default function Header() {
     // const intervalId = setInterval(checkExpiration, 60000);
 
     return () => {
-
-      console.log('unmount check expiration')
-
-    }; 
+      console.log("unmount check expiration");
+    };
     // return () => clearInterval(intervalId); // Cleanup on unmount
   }, [dispatch, router]);
 
@@ -78,7 +77,14 @@ export default function Header() {
       />
       <header className="sticky top-0 z-50 bg-white shadow-md py-4">
         <div className="container mx-auto flex justify-around items-center px-4">
-          <h1 className="text-2xl font-bold text-blue-600">QuickLit</h1>
+          {/* <h1 className="text-2xl font-bold text-blue-600">QuickLit</h1> */}
+          <div className="flex items-end space-x-1">
+            <h1 className="text-4xl text-blue-600 tracking-tight">Quick</h1>
+            <h1 className="text-4xl font-bold text-yellow-300 tracking-tight transform -rotate-12 origin-bottom-left">
+              Lit
+            </h1>
+          </div>
+
           <nav className="">
             <ul className="flex space-x-8 items-center">
               <li>
@@ -86,6 +92,7 @@ export default function Header() {
                   <RiHome2Line className="text-gray-600 hover:text-blue-500 text-xl" />
                 </Link>
               </li>
+
               <li>
                 <Link href="/reads">
                   <FaRegCommentAlt className="text-gray-600 hover:text-blue-500 text-xl" />
@@ -105,7 +112,7 @@ export default function Header() {
                     </Link>
                   </li>
                   <li>
-                    <button onClick={()=>handleLogout(dispatch, router)}>
+                    <button onClick={() => handleLogout(dispatch, router)}>
                       <FiLogOut className="text-gray-600 hover:text-blue-500 text-xl" />
                     </button>
                   </li>
@@ -118,4 +125,3 @@ export default function Header() {
     </>
   );
 }
-

@@ -9,6 +9,7 @@ import { fetchRecommendations } from "@/redux/features/recommendationsSlice";
 import { fetchPreferences } from "@/redux/features/preferenceSlice";
 import Layout from "@/components/Layout";
 import { PuffLoader } from "react-spinners";
+import Image from "next/image";
 
 export default function HomePage() {
   const dispatch = useDispatch();
@@ -59,8 +60,8 @@ export default function HomePage() {
           Welcome Back to QuickLit!
         </h1>
         <p className="text-lg text-gray-700 mb-6 text-center max-w-xl">
-          It seems you haven't set any preferences yet. Let's get started with
-          that.
+        It seems you haven&rsquo;t set any preferences yet. Let&rsquo;s get started with that.
+
         </p>
         <Link
           href="/interests"
@@ -74,21 +75,24 @@ export default function HomePage() {
 
   // 3. User is not authenticated (guest)
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
-      <h1 className="text-4xl font-bold text-blue-600 mb-4">
-        Welcome to QuickLit!
+    <div className="relative h-screen bg-gray-50 h-[calc(100vh-68px)]" style={{ backgroundImage: "url('https://altaseamedia.s3.us-west-1.amazonaws.com/wp-content/uploads/2021/07/31133059/How-oceans-benefit.jpg')" }}>
+
+    {/* Overlay */}
+    <div className="absolute inset-0 bg-gradient-to-b from-blue-200 to-blue-700 opacity-75"></div>
+
+    {/* Content */}
+    <div className="relative z-10 flex flex-col items-center justify-center h-full text-center p-6">
+      <h1 className="text-5xl md:text-6xl font-bold text-white mb-4">
+        Welcome to <span className="text-blue-800">Quick</span><span className="text-yellow-300">Lit</span>
       </h1>
-      <p className="text-lg text-gray-700 mb-6 text-center max-w-xl">
-        Discover amazing content, learn new things, and join our community of
-        enthusiasts.
+      <p className="text-lg md:text-xl text-gray-200 max-w-2xl mb-8">
+        Dive into the world of insightful articles, engaging stories, and a vibrant community ready to explore and learn together.
       </p>
-      <Link
-        href="/login"
-        className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-500 transition duration-300"
-      >
-        Get Started
+      <Link href="/login" className="bg-yellow-400 text-gray-800 text-lg font-semibold py-3 px-8 rounded-lg shadow-lg hover:bg-yellow-300 transition duration-300">
+          Get Started
       </Link>
     </div>
+  </div> 
   );
 }
 

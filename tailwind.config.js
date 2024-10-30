@@ -12,7 +12,7 @@ module.exports = {
         foreground: "var(--foreground)",
       },
       boxShadow: {
-        neon: '0 0 15px rgba(0, 123, 255, 0.8)', // Blue neon glow effect
+        neon: '0 0 15px rgba(0, 123, 255, 0.8)',
       },
     },
   },

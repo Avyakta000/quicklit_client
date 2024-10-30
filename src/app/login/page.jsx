@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, Suspense } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   loginUser,
@@ -17,7 +17,6 @@ import { clearRecommendations } from "@/redux/features/recommendationsSlice";
 import { clearPreferences } from "@/redux/features/preferenceSlice";
 
 const LoginPage = () => {
-
   const router = useRouter();
   const dispatch = useDispatch();
   const { status, error, user } = useSelector((state) => state.auth);
@@ -34,38 +33,31 @@ const LoginPage = () => {
     const code = searchParams.get("code");
     const redirected = searchParams.get("redirected");
 
-    if (redirected==="unauthenticated" && !isAuthenticated) {
-      console.log('stat x-auth-status', redirected)
-      dispatch(clearAuth())
+    if (redirected === "unauthenticated" && !isAuthenticated) {
+      console.log('stat x-auth-status', redirected);
+      dispatch(clearAuth());
       dispatch(clearPreferences());
       dispatch(clearRecommendations());
       localStorage.removeItem("q_exp");
       // handleLogout(dispatch, router)
     }
-    if(status==="success" && isAuthenticated){
-      // im having to do this because the state still exists after being redirected by middleware since i dont want to go to 
-      
-      console.log(isAuthenticated, user, 'yes authenticated')
-      router.push("/")
+
+    if (status === "success" && isAuthenticated) {
+      console.log(isAuthenticated, user, 'yes authenticated');
+      router.push("/");
     }
+
     // Only dispatch login if code is present and we haven't already dispatched it
     if (code && !isAuthenticated && !hasDispatchedGoogleLogin.current) {
       console.log(code, "code is present");
-
-      // Mark the ref to prevent multiple dispatches
       hasDispatchedGoogleLogin.current = true;
-
-      // Dispatch Google login
       dispatch(loginWithGoogle(code));
 
       // Replace URL to remove code param from the URL bar
       const newUrl = window.location.origin + window.location.pathname;
       router.replace(newUrl);
     }
-
-    // Clear errors on page load
-    // dispatch(clearError());
-  }, [searchParams, dispatch, isAuthenticated, router]);
+  }, [searchParams, dispatch, isAuthenticated, router, user, status]);
 
   const handleGoogleLogin = () => {
     const clientID =
@@ -82,8 +74,13 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md p-8 space-y-4 bg-white rounded-lg shadow-md">
+    <div 
+    className="flex items-center justify-center h-[calc(100vh-64px)] bg-gray-100 relative"
+    style={{ backgroundImage: "url('https://static.vecteezy.com/system/resources/thumbnails/050/503/588/small_2x/a-close-up-of-a-wave-in-the-ocean-photo.jpeg')", backgroundRepeat: "no-repeat",
+      backgroundSize: "cover", }}>
+      <div className="absolute inset-0 bg-gradient-to-b from-red-200 to-blue-600 opacity-75"></div>
+
+      <div className="relative w-full max-w-md p-8 space-y-4 bg-white rounded-lg shadow-md">
         <h2 className="text-2xl font-bold text-center text-blue-600">Log In</h2>
         {error && <p className="text-red-500">{error}</p>}
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -124,9 +121,9 @@ const LoginPage = () => {
           <button
             type="submit"
             className="w-full py-2 mt-2 font-semibold text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-500"
-            disabled={status==="loading"}
+            disabled={status === "loading"}
           >
-            {status==="loading" ? "Logging in..." : "Log In"}
+            {status === "loading" ? "Logging in..." : "Log In"}
           </button>
         </form>
         <div className="flex items-center justify-center mt-4">
@@ -141,7 +138,7 @@ const LoginPage = () => {
           <FaGoogle /> <span className="mx-2">Log in with Google</span>
         </button>
         <p className="text-sm text-center text-gray-500 mt-6">
-          New here ?
+          New here?
           <Link href={"/signup"} className="text-blue-600 mx-1 underline">
             Sign Up
           </Link>
@@ -151,68 +148,89 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+// Wrap the LoginPage component with Suspense
+const WrappedLoginPage = () => (
+  <Suspense fallback={<div>Loading...</div>}>
+    <LoginPage />
+  </Suspense>
+);
+
+export default WrappedLoginPage;
+
+
 
 // "use client";
 
-// import { useEffect, useState } from "react";
+// import { useEffect, useState, useRef } from "react";
 // import { useDispatch, useSelector } from "react-redux";
-// import { loginUser, clearError, loginWithGoogle, selectIsAuthenticated } from "@/redux/features/userAuth";
+// import {
+//   loginUser,
+//   clearError,
+//   loginWithGoogle,
+//   selectIsAuthenticated,
+//   clearAuth,
+// } from "@/redux/features/userAuth";
 // import { useRouter, useSearchParams } from "next/navigation";
 // import { FaGoogle } from "react-icons/fa";
+// import Link from "next/link";
+// import { handleLogout } from "@/utils/helper";
+// import { clearRecommendations } from "@/redux/features/recommendationsSlice";
+// import { clearPreferences } from "@/redux/features/preferenceSlice";
 
 // const LoginPage = () => {
+
 //   const router = useRouter();
 //   const dispatch = useDispatch();
-//   const { status==="loading", error } = useSelector((state) => state.auth);
+//   const { status, error, user } = useSelector((state) => state.auth);
 //   const searchParams = useSearchParams();
-//   const isAuthenticated = useSelector(selectIsAuthenticated)
+//   const isAuthenticated = useSelector(selectIsAuthenticated);
 
 //   const [email, setEmail] = useState("");
 //   const [password, setPassword] = useState("");
 
+//   // Ref to track if Google login has already been dispatched
+//   const hasDispatchedGoogleLogin = useRef(false);
+
 //   useEffect(() => {
 //     const code = searchParams.get("code");
-//     if (code && !isAuthenticated) {
-//       console.log(code, 'code is present');
+//     const redirected = searchParams.get("redirected");
+
+//     if (redirected==="unauthenticated" && !isAuthenticated) {
+//       console.log('stat x-auth-status', redirected)
+//       dispatch(clearAuth())
+//       dispatch(clearPreferences());
+//       dispatch(clearRecommendations());
+//       localStorage.removeItem("q_exp");
+//       // handleLogout(dispatch, router)
+//     }
+//     if(status==="success" && isAuthenticated){
+//       // im having to do this because the state still exists after being redirected by middleware since i dont want to go to 
+      
+//       console.log(isAuthenticated, user, 'yes authenticated')
+//       router.push("/")
+//     }
+//     // Only dispatch login if code is present and we haven't already dispatched it
+//     if (code && !isAuthenticated && !hasDispatchedGoogleLogin.current) {
+//       console.log(code, "code is present");
+
+//       // Mark the ref to prevent multiple dispatches
+//       hasDispatchedGoogleLogin.current = true;
+
+//       // Dispatch Google login
 //       dispatch(loginWithGoogle(code));
 
-//       // Clear the code from URL after successful dispatch
+//       // Replace URL to remove code param from the URL bar
 //       const newUrl = window.location.origin + window.location.pathname;
 //       router.replace(newUrl);
 //     }
 
 //     // Clear errors on page load
-//     dispatch(clearError());
-//   }, [searchParams, dispatch]);
-
-//   // Redirect user if authenticated
-//   useEffect(() => {
-//     if (isAuthenticated) {
-//       router.push("/");  // Or any other authenticated page
-//     }
-//   }, [isAuthenticated, router]);
-
-//   // useEffect(() => {
-//   //   dispatch(clearError());
-
-//   //   const code = searchParams.get("code");
-//   //   console.log("outside dispatch", code)
-//   //   // Only initiate Google login if we have a valid authorization code
-//   //   if (code && !isAuthenticated) {
-//   //     console.log(code, 'code is present')
-//   //     dispatch(loginWithGoogle(code)); // Dispatch Google login action
-//   //   }
-//   // }, [searchParams, dispatch]);
-
-//   // useEffect(() => {
-//   //   if (user) {
-//   //     router.push("/"); // Redirect to home page if login is successful
-//   //   }
-//   // }, [user, router]);
+//     // dispatch(clearError());
+//   }, [searchParams, dispatch, isAuthenticated, router, user, status]);
 
 //   const handleGoogleLogin = () => {
-//     const clientID = "802970042014-bbq707u390sn2nmcr7ujqn1src1b2po3.apps.googleusercontent.com";
+//     const clientID =
+//       "802970042014-bbq707u390sn2nmcr7ujqn1src1b2po3.apps.googleusercontent.com";
 //     const callBackURI = "http://localhost:3000/login"; // Replace with your callback URI
 //     const googleAuthURL = `https://accounts.google.com/o/oauth2/v2/auth?redirect_uri=${callBackURI}&prompt=consent&response_type=code&client_id=${clientID}&scope=openid%20email%20profile&access_type=offline`;
 
@@ -226,12 +244,17 @@ export default LoginPage;
 
 //   return (
 //     <div className="flex items-center justify-center min-h-screen bg-gray-100">
-//       <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">
+//       <div className="w-full max-w-md p-8 space-y-4 bg-white rounded-lg shadow-md">
 //         <h2 className="text-2xl font-bold text-center text-blue-600">Log In</h2>
 //         {error && <p className="text-red-500">{error}</p>}
 //         <form onSubmit={handleSubmit} className="space-y-4">
 //           <div>
-//             <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
+//             <label
+//               htmlFor="email"
+//               className="block text-sm font-medium text-gray-700"
+//             >
+//               Email
+//             </label>
 //             <input
 //               type="email"
 //               id="email"
@@ -243,7 +266,12 @@ export default LoginPage;
 //             />
 //           </div>
 //           <div>
-//             <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
+//             <label
+//               htmlFor="password"
+//               className="block text-sm font-medium text-gray-700"
+//             >
+//               Password
+//             </label>
 //             <input
 //               type="password"
 //               id="password"
@@ -262,218 +290,23 @@ export default LoginPage;
 //             {status==="loading" ? "Logging in..." : "Log In"}
 //           </button>
 //         </form>
-//         <div className="flex items-center justify-center mt-2">
-//           <span className="w-full h-px bg-gray-300"></span>
-//           <span className="mx-4 text-gray-500">or</span>
-//           <span className="w-full h-px bg-gray-300"></span>
+//         <div className="flex items-center justify-center mt-4">
+//           <hr className="flex-grow border-gray-300" />
+//           <span className="mx-2 text-gray-500">or</span>
+//           <hr className="flex-grow border-gray-300" />
 //         </div>
 //         <button
+//           className="flex items-center justify-center w-full py-2 mt-0 font-semibold text-white bg-red-600 rounded-md hover:bg-red-700 focus:outline-none focus:ring focus:ring-red-500"
 //           onClick={handleGoogleLogin}
-//           className="flex items-center justify-center w-full py-2 mt-2 font-semibold text-white bg-red-600 rounded-md hover:bg-red-700 focus:outline-none focus:ring focus:ring-red-500"
 //         >
 //           <FaGoogle /> <span className="mx-2">Log in with Google</span>
 //         </button>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default LoginPage;
-
-// "use client";
-
-// import { useEffect, useState } from "react";
-// import { useDispatch, useSelector } from "react-redux";
-// import {
-//   loginUser,
-//   clearError,
-//   loginWithGoogle,
-// } from "@/redux/features/userAuth";
-// import { useRouter, useSearchParams } from "next/navigation";
-// import { FaGoogle } from "react-icons/fa";
-
-// const LoginPage = () => {
-//   const router = useRouter();
-//   const dispatch = useDispatch();
-//   const { user, status==="loading", error } = useSelector((state) => state.auth);
-//   const [email, setEmail] = useState("");
-//   const [password, setPassword] = useState("");
-//   const searchParams = useSearchParams();
-
-//   useEffect(() => {
-//     // Clear error when component mounts
-//     dispatch(clearError());
-//     const code = searchParams.get("code");
-//     if (code && !user) {
-//       // Ensure it's only triggered if the user isn't already logged in
-//       dispatch(loginWithGoogle(code)); // Dispatch the login with Google action
-//     }
-//   }, [dispatch, searchParams, user]);
-
-//   useEffect(() => {
-//     if (user) {
-//       router.push("/"); // Redirect after successful login
-//     }
-//   });
-
-//   const handleGoogleLogin = () => {
-//     const clientID =
-//       "802970042014-bbq707u390sn2nmcr7ujqn1src1b2po3.apps.googleusercontent.com";
-//     const callBackURI = "http://localhost:3000/login";
-//     window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?redirect_uri=${callBackURI}&prompt=consent&response_type=code&client_id=${clientID}&scope=openid%20email%20profile&access_type=offline`; // Adjust the URL based on your Django server
-//   };
-
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-//     dispatch(loginUser({ email, password }));
-//   };
-
-//   return (
-//     <>
-//       <div className="flex items-center justify-center min-h-screen bg-gray-100">
-//         <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">
-//           <h2 className="text-2xl font-bold text-center text-blue-600">
-//             Log In
-//           </h2>
-//           {error && <p className="text-red-500">{error}</p>}{" "}
-//           {/* Error message display */}
-//           <form onSubmit={handleSubmit} className="space-y-4">
-//             <div>
-//               <label
-//                 htmlFor="email"
-//                 className="block text-sm font-medium text-gray-700"
-//               >
-//                 Email
-//               </label>
-//               <input
-//                 type="email"
-//                 id="email"
-//                 value={email}
-//                 onChange={(e) => setEmail(e.target.value)}
-//                 required
-//                 className="block w-full px-3 py-2 mt-1 text-gray-900 border-b border-gray-300 focus:outline-none focus:ring focus:ring-blue-500"
-//                 placeholder="you@example.com"
-//               />
-//             </div>
-//             <div>
-//               <label
-//                 htmlFor="password"
-//                 className="block text-sm font-medium text-gray-700"
-//               >
-//                 Password
-//               </label>
-//               <input
-//                 type="password"
-//                 id="password"
-//                 value={password}
-//                 onChange={(e) => setPassword(e.target.value)}
-//                 required
-//                 className="block w-full px-3 py-2 mt-1 text-gray-900 border-b border-gray-300 focus:outline-none focus:ring focus:ring-blue-500"
-//                 placeholder="********"
-//               />
-//             </div>
-//             <button
-//               type="submit"
-//               className="w-full py-2 mt-2 font-semibold text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-500"
-//               disabled={status==="loading"} // Disable button while status==="loading"
-//             >
-//               {status==="loading" ? "Logging in..." : "Log In"} {/* Show status==="loading" state */}
-//             </button>
-//           </form>
-//           <div className="flex items-center justify-center mt-2">
-//             <span className="w-full h-px bg-gray-300"></span>
-//             <span className="mx-4 text-gray-500">or</span>
-//             <span className="w-full h-px bg-gray-300"></span>
-//           </div>
-//           <button
-//             onClick={handleGoogleLogin}
-//             className="flex items-center justify-center w-full py-2 mt-2 font-semibold text-white bg-red-600 rounded-md hover:bg-red-700 focus:outline-none focus:ring focus:ring-red-500"
-//           >
-//             <FaGoogle /> <span className="mx-2">Log in with Google</span>
-//           </button>
-//         </div>
-//       </div>
-//     </>
-//   );
-// };
-
-// export default LoginPage;
-
-// import { useEffect, useState } from 'react';
-// import { useRouter } from 'next/router';
-
-// const LoginPage = () => {
-
-//   const router = useRouter();
-//   useEffect(()=>{
-//     code
-//   })
-//   const { query } = router;   const [email, setEmail] = useState('');
-//   const [password, setPassword] = useState('');
-
-//   const handleGoogleLogin = () => {
-//     const clientID = "802970042014-bbq707u390sn2nmcr7ujqn1src1b2po3.apps.googleusercontent.com"
-//     const callBackURI = "http://localhost:3000/login"
-//     window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?redirect_uri=${callBackURI}&prompt=consent&response_type=code&client_id=${clientID}&scope=openid%20email%20profile&access_type=offline`; // Adjust the URL based on your Django server
-//   };
-
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-//     // Handle regular login logic here (e.g., API call to your Django backend)
-//     console.log("Logging in with:", { email, password });
-//   };
-
-//   return (
-//     <div className="flex items-center justify-center min-h-screen bg-gray-100">
-//       <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">
-//         <h2 className="text-2xl font-bold text-center text-blue-600">Log In</h2>
-
-//         <form onSubmit={handleSubmit} className="space-y-4">
-//           <div>
-//             <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
-//             <input
-//               type="email"
-//               id="email"
-//               value={email}
-//               onChange={(e) => setEmail(e.target.value)}
-//               required
-//               className="block w-full px-3 py-2 mt-1 text-gray-900 border-b border-gray-300 focus:outline-none focus:ring focus:ring-blue-500"
-//               placeholder="you@example.com"
-//             />
-//           </div>
-//           <div>
-//             <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
-//             <input
-//               type="password"
-//               id="password"
-//               value={password}
-//               onChange={(e) => setPassword(e.target.value)}
-//               required
-//               className="block w-full px-3 py-2 mt-1 text-gray-900 border-b border-gray-300 focus:outline-none focus:ring focus:ring-blue-500"
-//               placeholder="********"
-//             />
-//           </div>
-//           <button
-//             type="submit"
-//             className="w-full py-2 mt-4 font-semibold text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-500"
-//           >
-//             Log In
-//           </button>
-//         </form>
-
-//         <div className="flex items-center justify-center mt-4">
-//           <span className="w-full h-px bg-gray-300"></span>
-//           <span className="mx-4 text-gray-500">or</span>
-//           <span className="w-full h-px bg-gray-300"></span>
-//         </div>
-
-//         <button
-//           onClick={handleGoogleLogin}
-//           className="flex items-center justify-center w-full py-2 mt-4 font-semibold text-white bg-red-600 rounded-md hover:bg-red-700 focus:outline-none focus:ring focus:ring-red-500"
-//         >
-
-//           Log in with Google
-//         </button>
+//         <p className="text-sm text-center text-gray-500 mt-6">
+//           New here ?
+//           <Link href={"/signup"} className="text-blue-600 mx-1 underline">
+//             Sign Up
+//           </Link>
+//         </p>
 //       </div>
 //     </div>
 //   );

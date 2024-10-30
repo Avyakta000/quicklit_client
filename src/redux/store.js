@@ -18,5 +18,5 @@ const store = configureStore({
   },
 });
 // initial state
-// console.log(store.getState(), 'main store');
+console.log(process.env.NEXT_PUBLIC_BACKEND_URL, 'main store');
 export default store;
