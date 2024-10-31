@@ -7,11 +7,11 @@ import { useSelector } from 'react-redux';
 const Layout = ({ children }) => {
     const isAuthenticated = useSelector(selectIsAuthenticated);
   return (
-    <main className="h-screen bg-gray-200 flex justify-center items-center">
+    <main className="h-screen bg-gray-900 flex justify-center items-center">
     <div className="flex w-full max-w-[1000px]">
       {
         isAuthenticated && 
-      <div className="w-[300px] mt-2 p-2 mb-2 rounded-md border-r border-gray-300">
+      <div className="w-[300px] mt-2 p-2 mb-2 rounded-md border-gray-300">
         <Profile />
       </div>
       }

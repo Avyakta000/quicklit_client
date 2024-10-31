@@ -37,7 +37,7 @@ export default function RootLayout({ children }) {
         >
         <LoadingProvider> {/* Wrap with LoadingProvider */}
             <Header />
-            <main className="flex-grow">
+            <main className="flex-grow bg-gray-900">
               {children}
             </main>
             {!noFooterRoutes.includes(pathname) && (

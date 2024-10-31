@@ -42,7 +42,7 @@ export default async function middleware(req) {
       return NextResponse.redirect(loginUrl);
     }
   }
-
+  console.log('last block in action')
   return NextResponse.next();
 }
 
