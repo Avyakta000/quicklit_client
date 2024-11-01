@@ -47,7 +47,7 @@ export default async function middleware(req) {
 }
 
 export const config = {
-  matcher: ['/post-a-read', '/interests', '/reads', '/login', '/signup'],
+  matcher: ['/post-a-read', '/interests', '/login', '/signup'],
 };
 
 
