@@ -28,13 +28,6 @@ const ReadDetailPage = ({ params }) => {
               {read.created_at} by {read.author_full_name}
             </p>
           </header>
-          {/* {read.images.length > 0 && (
-          <Image
-            src={read.images[0].image}
-            alt={read.title}
-            className="w-full h-72 object-cover rounded-lg mb-4"
-          />
-        )} */}
           {read?.cover_image && (
             <div className="relative w-full h-64">
               <Image
@@ -49,10 +42,7 @@ const ReadDetailPage = ({ params }) => {
 
           <div className="prose mx-auto">
             <div dangerouslySetInnerHTML={{ __html: read.content }} />
-            {/* <pre className="m-0 p-0"></pre>
-        <code className="m-0 p-0"></code> */}
           </div>
-          {/* <p className="text-gray-600">{read.content}</p> */}
           <CommentSystem readId={read.id} />
         </div>
       </div>

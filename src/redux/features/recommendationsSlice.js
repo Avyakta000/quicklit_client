@@ -50,8 +50,6 @@ const recommendationsSlice = createSlice({
 });
 
 export const selectRecommendationBySlug = (state, slug) => {
-  console.log(slug, 'slug');
-  console.log(state.recommendations.recommendations, 'data recommendations');
   return state.recommendations.recommendations.find(recommendations => recommendations.slug === slug);
 }
 

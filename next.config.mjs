@@ -1,12 +1,18 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-
     images: {
-        domains: [
-            'st3.depositphotos.com',
-            'quickreads.s3.amazonaws.com',
-        
-        ], 
+        remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: 'st3.depositphotos.com',
+                pathname: '/**', // Allows any path from the domain
+            },
+            {
+                protocol: 'https',
+                hostname: 'quickreads.s3.amazonaws.com',
+                pathname: '/**', // Allows any path from the domain
+            },
+        ],
     },
 };
 

@@ -5,7 +5,6 @@ import axios from 'axios';
 // Thunks for async actions
 export const fetchComments = createAsyncThunk('comments/fetchComments', async (readId) => {
     const response = await axiosInstance.get(`/api/comments/?blog_id=${readId}`, { withCredentials: true });
-    console.log(response.data, readId, ' fetchComments')
     return response.data;
 });
 

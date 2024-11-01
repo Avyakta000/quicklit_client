@@ -34,7 +34,7 @@ const LoginPage = () => {
     const redirected = searchParams.get("redirected");
 
     if (redirected === "unauthenticated" && !isAuthenticated) {
-      console.log('stat x-auth-status', redirected);
+      // console.log('stat x-auth-status', redirected);
       dispatch(clearAuth());
       dispatch(clearPreferences());
       dispatch(clearRecommendations());
@@ -43,13 +43,13 @@ const LoginPage = () => {
     }
 
     if (status === "success" && isAuthenticated) {
-      console.log(isAuthenticated, user, 'yes authenticated');
+      // console.log(isAuthenticated, user, 'yes authenticated');
       router.push("/");
     }
 
     // Only dispatch login if code is present and we haven't already dispatched it
     if (code && !isAuthenticated && !hasDispatchedGoogleLogin.current) {
-      console.log(code, "code is present");
+      // console.log(code, "code is present");
       hasDispatchedGoogleLogin.current = true;
       dispatch(loginWithGoogle(code));
 
@@ -62,7 +62,7 @@ const LoginPage = () => {
   const handleGoogleLogin = () => {
     const clientID =
       "802970042014-bbq707u390sn2nmcr7ujqn1src1b2po3.apps.googleusercontent.com";
-    const callBackURI = "https://quicklit.in/login"; // Replace with your callback URI
+    const callBackURI = process.env.NEXT_PUBLIC_CALLBACK_URI; // Replace with your callback URI
     const googleAuthURL = `https://accounts.google.com/o/oauth2/v2/auth?redirect_uri=${callBackURI}&prompt=consent&response_type=code&client_id=${clientID}&scope=openid%20email%20profile&access_type=offline`;
 
     window.location.href = googleAuthURL;

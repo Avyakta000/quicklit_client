@@ -45,7 +45,6 @@ const readSlice = createSlice({
       .addCase(fetchReads.fulfilled, (state, action) => {
         state.reads = action.payload;
         state.status = 'success'; // Set status to success
-        console.log('Fetched reads:', action.payload); // Debugging line
       })
       .addCase(fetchReads.rejected, (state, action) => {
         state.error = action.error.message;
@@ -58,7 +57,6 @@ const readSlice = createSlice({
       .addCase(postRead.fulfilled, (state, action) => {
         // state.reads.push(action.payload); // Add the new read to the state
         state.status = 'success'; // Set status to success
-        console.log('Posted new read:', action.payload); // Debugging line
       })
       .addCase(postRead.rejected, (state, action) => {
         state.error = action.error.message;

@@ -27,7 +27,6 @@ const geistMono = localFont({
 export default function RootLayout({ children }) {
   const pathname = usePathname()
   const noFooterRoutes = ['/signup', '/login'];
-  console.log(pathname, 'pathname')
   return (
     <Providers>
 

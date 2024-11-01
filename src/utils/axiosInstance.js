@@ -44,7 +44,7 @@ axiosInstance.interceptors.response.use(
         localStorage.removeItem("q_exp")
         // const router = getRouter()
         handleLogout(store.dispatch, router);
-        console.error('Max retry attempts reached. Logging out user.');
+        // console.error('Max retry attempts reached. Logging out user.');
         retryCount = 0; 
         return Promise.reject(error); 
       }
@@ -55,13 +55,13 @@ axiosInstance.interceptors.response.use(
           withCredentials: true, 
         });
 
-        console.log(response.data, 'response new 4 refresh');
+        // console.log(response.data, 'response new 4 refresh');
 
         retryCount = 0; // Reset retry counter on successful refresh
         // Retry the original request with the new token
         return axiosInstance(originalRequest);
       } catch (err) {
-        console.error('Token refresh failed:', err);
+        // console.error('Token refresh failed:', err);
         return Promise.reject(err); // Reject if the refresh fails
       }
     }

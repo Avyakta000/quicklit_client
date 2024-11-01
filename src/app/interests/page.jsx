@@ -18,11 +18,6 @@ const CategorySelection = () => {
   
   const [showTopics, setShowTopics] = useState(false); // Toggle between categories and topics view
 
-  // useEffect(() => {
-  //   // Reset preferences status when the component mounts
-  //   dispatch(resetPreferencesStatus());
-  // }, [dispatch]);
-
   useEffect(() => {
     if(status==="idle"){
       // dispatch(resetPreferencesStatus());

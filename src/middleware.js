@@ -7,11 +7,9 @@ export default async function middleware(req) {
 
   const { pathname } = req.nextUrl;
 
-  console.log({ name: 'refresh', value: refreshToken }, 'check on server');
 
   // Redirect unauthenticated users to login if they try to access protected routes
   if (!refreshToken && !['/login', '/signup'].includes(pathname)) {
-    console.log('Redirecting unauthenticated user to login');
     const loginUrl = new URL('/login', req.nextUrl.origin);
     loginUrl.searchParams.set('redirected', 'unauthenticated'); // Add query parameter
     return NextResponse.redirect(loginUrl);
@@ -19,7 +17,6 @@ export default async function middleware(req) {
 
   // Prevent authenticated users from accessing login or signup
   if (refreshToken && ['/login', '/signup'].includes(pathname)) {
-    console.log('Authenticated user, preventing access to login or signup');
     const home = new URL('/', req.nextUrl.origin); // Change to your preferred page
     return NextResponse.redirect(home);
   }
@@ -27,22 +24,20 @@ export default async function middleware(req) {
   if (pathname === '/interests' && refreshToken) {
     try {
       const secret = new TextEncoder().encode(process.env.JWT_SECRET);
-      console.log(process.env.JWT_SECRET, ':payload')
       const { payload } = await jwtVerify(refreshToken, secret);
       if (payload.hasPreferences) {
-        console.log('User with preferences, redirecting from /interests');
-        const home = new URL('/', req.nextUrl.origin);
+        // console.log('User with preferences, redirecting from /interests');
+        // const home = new URL('/', req.nextUrl.origin);
         return NextResponse.next();
 
         // return NextResponse.redirect(home);
       }
     } catch (error) {
-      console.error('Token verification failed', error);
       const loginUrl = new URL('/login', req.nextUrl.origin);
       return NextResponse.redirect(loginUrl);
     }
   }
-  console.log('last block in action')
+  // console.log('last block in action')
   return NextResponse.next();
 }
 
@@ -51,46 +46,6 @@ export const config = {
 };
 
 
-
-// import { NextResponse } from 'next/server';
-
-// export default function middleware(req) {
-//   const refreshTokenCookie = req.cookies.get('refresh');
-//   const refreshToken = refreshTokenCookie ? refreshTokenCookie.value : null;
-
-//   console.log({ name: 'refresh', value: refreshToken }, 'check on server');
-
-//   const { pathname } = req.nextUrl;
-
-//   // Redirect unauthenticated users to login if they try to access protected routes
-//   if (!refreshToken && !['/login', '/signup'].includes(pathname)) {
-//     console.log('Redirecting unauthenticated user to login');
-//     const loginUrl = new URL('/login', req.nextUrl.origin);
-//     loginUrl.searchParams.set('redirected', 'unauthenticated'); // Add query parameter
-//     const response = NextResponse.redirect(loginUrl);
-//     // response.headers.set('x-auth-status', 'unauthenticated');
-//     return response;
-//   }
-
-//   // Prevent authenticated users from accessing login or signup
-//   if (refreshToken && ['/login', '/signup'].includes(pathname)) {
-//     console.log('Authenticated user, preventing access to login or signup');
-//     const home = new URL('/', req.nextUrl.origin); // Change to your preferred page
-//     const response = NextResponse.redirect(home);
-//     // response.headers.set('x-auth-status', 'authenticated');
-//     return response
-//   }
-
-//   return NextResponse.next();
-// }
-
-// export const config = {
-//   matcher: ['/post-a-read', '/interests', '/reads', '/login', '/signup'],
-// };
-
-
-
-// import store from './redux/store';
 // import { clearAuth } from './redux/features/userAuth';
 
 // const protectedRoutes = ['/post-a-read', '/interests', '/reads'];
