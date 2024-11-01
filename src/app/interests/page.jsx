@@ -31,7 +31,7 @@ const CategorySelection = () => {
   }, [status, dispatch]);
 
   useEffect(() => {
-    if (statusPreferences === "succeeded" && preferences!==null) {
+    if (statusPreferences === "succeeded" && preferences.length!==0) {
       setAlert({ type: 'success', message: 'Preferences Set Successfully' });
       dispatch(clearSelections());
       dispatch(fetchRecommendations());
@@ -92,16 +92,16 @@ const CategorySelection = () => {
   }
 
   return (
-    <div className="max-w-3xl mx-auto py-12 px-6">
+    <div className="max-w-3xl h-full mx-auto py-12 px-6">
       {alert && <CustomAlert {...alert} onDismiss={() => setAlert(null)} />}
-      <h1 className="text-4xl font-extrabold text-center mb-10 text-gray-800">
+      <h1 className="text-4xl font-extrabold text-center mb-10 text-white">
         {showTopics ? 'Choose Your Topics' : 'Choose Your Categories'}
       </h1>
 
       {/* Category Selection View */}
       {!showTopics && (
         <>
-          <h2 className="text-2xl font-semibold mb-4">Categories</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-white">Categories</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
             {categories.map((category) => (
               <button
@@ -131,7 +131,7 @@ const CategorySelection = () => {
       {/* Topics Selection View */}
       {showTopics && (
         <>
-          <h2 className="text-2xl font-semibold mb-4">Topics</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-white">Topics</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
             {topics.map((topic) => (
               <button

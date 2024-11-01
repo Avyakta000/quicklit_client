@@ -48,7 +48,7 @@ const SignupPage = () => {
 
   const handleGoogleLogin = () => {
     const clientID = "802970042014-bbq707u390sn2nmcr7ujqn1src1b2po3.apps.googleusercontent.com"; 
-    const callBackURI = "http://localhost:3000/login"; // Replace with your callback URI
+    const callBackURI = process.env.NEXT_PUBLIC_CALLBACK_URI; // Replace with your callback URI
     const googleAuthURL = `https://accounts.google.com/o/oauth2/v2/auth?redirect_uri=${callBackURI}&prompt=consent&response_type=code&client_id=${clientID}&scope=openid%20email%20profile&access_type=offline`;
 
     window.location.href = googleAuthURL;

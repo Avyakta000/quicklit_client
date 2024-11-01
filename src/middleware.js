@@ -42,12 +42,12 @@ export default async function middleware(req) {
       return NextResponse.redirect(loginUrl);
     }
   }
-
+  console.log('last block in action')
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ['/post-a-read', '/interests', '/reads', '/login', '/signup'],
+  matcher: ['/post-a-read', '/interests', '/login', '/signup'],
 };
 
 

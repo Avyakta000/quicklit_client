@@ -5,7 +5,7 @@ const nextConfig = {
         domains: [
             'st3.depositphotos.com',
             'quickreads.s3.amazonaws.com',
-            "knilt.arcc.albany.edu"
+        
         ], 
     },
 };
