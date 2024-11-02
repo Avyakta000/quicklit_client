@@ -10,6 +10,7 @@ export default async function middleware(req) {
 
   // Redirect unauthenticated users to login if they try to access protected routes
   if (!refreshToken && !['/login', '/signup'].includes(pathname)) {
+    console.log('refresh token not found!!',refreshToken)
     const loginUrl = new URL('/login', req.nextUrl.origin);
     loginUrl.searchParams.set('redirected', 'unauthenticated'); // Add query parameter
     return NextResponse.redirect(loginUrl);
@@ -17,6 +18,7 @@ export default async function middleware(req) {
 
   // Prevent authenticated users from accessing login or signup
   if (refreshToken && ['/login', '/signup'].includes(pathname)) {
+    console.log('already signup/login')
     const home = new URL('/', req.nextUrl.origin); // Change to your preferred page
     return NextResponse.redirect(home);
   }
@@ -37,7 +39,7 @@ export default async function middleware(req) {
       return NextResponse.redirect(loginUrl);
     }
   }
-  // console.log('last block in action')
+  console.log('last block in action')
   return NextResponse.next();
 }
 

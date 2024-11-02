@@ -66,7 +66,7 @@ export default function AboutPage() {
         <p className="text-gray-300 text-lg py-6">
           QuickLit isn’t just a platform for consuming content; it’s a community. We encourage users to share their knowledge by posting articles, insights, and experiences in their fields. Whether you’re a professional, a student, or just someone passionate about learning, you’re welcome here.
         </p>
-        <Link href="/signup" className="bg-blue-600 text-black font-semibold py-3 px-8 rounded-lg transition duration-300 transform hover:scale-105 shadow-lg">
+        <Link href="/signup" className="bg-blue-600 text-gray-200 font-semibold py-3 px-8 rounded-lg transition duration-300 transform hover:scale-105 hover:bg-blue-700 shadow-lg">
             Join Us
         </Link>
       </section>

@@ -4,7 +4,7 @@ export default function Footer() {
   
   const currentYear = new Date().getFullYear();
   return (
-    <footer className="sticky b-0 bg-gradient-to-r from-blue-600 to-blue-900 text-white py-10 border-t-2 border-t-gray-400">
+    <footer className="sticky b-0 bg-gradient-to-r from-blue-800 to-blue-900 text-white py-10 border-t-2 border-t-gray-400">
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row justify-around items-center space-y-8 md:space-y-0">
           
@@ -24,7 +24,7 @@ export default function Footer() {
           {/* Links Section */}
           <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-10 text-center md:text-right">
             <Link href="/about" className="text-gray-300 hover:text-yellow-400 transition duration-300">
-              About Us
+              About
             </Link>
             <Link href="/reads" className="text-gray-300 hover:text-yellow-400 transition duration-300">
               Reads
