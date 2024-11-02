@@ -39,7 +39,7 @@ export default async function middleware(req) {
       return NextResponse.redirect(loginUrl);
     }
   }
-  console.log('last block in action')
+  console.log('last block in action', refreshToken, refreshTokenCookie)
   return NextResponse.next();
 }
 
