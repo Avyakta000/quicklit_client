@@ -44,9 +44,9 @@ export default function RootLayout({ children }) {
             <Footer/>
             )}
           </LoadingProvider>
-          {/* Google AdSense component */}
-          <GoogleAdsense pid={4116003405738263}/>
       </body>
+        {/* Google AdSense component */}
+        <GoogleAdsense pid={4116003405738263}/>
     </html>
     </Providers>
   );
